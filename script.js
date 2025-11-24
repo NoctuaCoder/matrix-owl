@@ -23,7 +23,7 @@ Specializing in premium dotfiles, ethereal UI/UX, and cyberpunk aesthetics.
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📧 Email: 38922657+NoctuaCoder@users.noreply.github.com
 🐙 GitHub: github.com/NoctuaCoder
-🌐 Portfolio: noctuacoder.github.io
+🌐 Portfolio: noctuacoder.github.io/NoctuaCoder/portfolio.html
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
 
     'projects.txt': `Featured Projects:
@@ -323,7 +323,7 @@ const commands = {
             printOutput('Terminating session...', 'error');
             printOutput('Goodbye! 🦉', 'info');
             setTimeout(() => {
-                window.location.href = 'https://noctuacoder.github.io';
+                window.location.href = 'https://noctuacoder.github.io/NoctuaCoder/portfolio.html';
             }, 1000);
         }
     },
