@@ -3,9 +3,9 @@
 
 class SnakeGame {
     constructor() {
-        this.gridWidth = 30;
-        this.gridHeight = 15;
-        this.snake = [{ x: 10, y: 7 }]; // Start more to the left
+        this.gridWidth = 35; // Bigger grid for more space
+        this.gridHeight = 18;
+        this.snake = [{ x: 10, y: 9 }]; // Start more to the left and centered
         this.direction = { x: 1, y: 0 }; // Moving right
         this.nextDirection = { x: 1, y: 0 };
         this.food = this.spawnFood();
@@ -13,7 +13,7 @@ class SnakeGame {
         this.highScore = this.loadHighScore();
         this.gameOver = false;
         this.paused = false;
-        this.speed = 150; // ms per frame
+        this.speed = 200; // ms per frame - slower for easier gameplay
         this.gameLoop = null;
         this.boundKeyHandler = null;
     }
@@ -92,9 +92,9 @@ class SnakeGame {
             }
             this.food = this.spawnFood();
 
-            // Speed up slightly
-            if (this.speed > 50) {
-                this.speed -= 2;
+            // Speed up slightly (less aggressive)
+            if (this.speed > 100 && this.score % 50 === 0) {
+                this.speed -= 5;
             }
 
             // Play eat sound
