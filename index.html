@@ -4,263 +4,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NoctuaCoder - Matrix Owl</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: #000;
-            overflow: hidden;
-            font-family: 'Courier New', monospace;
-        }
-
-        canvas {
-            display: block;
-            background: #000;
-        }
-
-        .content {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none;
-        }
-
-        .terminal {
-            background: rgba(0, 0, 0, 0.85);
-            border: 2px solid #00BFFF;
-            border-radius: 10px;
-            padding: 30px 40px;
-            box-shadow: 0 0 30px rgba(0, 191, 255, 0.5),
-                inset 0 0 20px rgba(0, 191, 255, 0.1);
-            max-width: 700px;
-            animation: terminalBoot 0.5s ease-out;
-        }
-
-        @keyframes terminalBoot {
-            from {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .terminal-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #00BFFF;
-        }
-
-        .terminal-buttons {
-            display: flex;
-            gap: 8px;
-        }
-
-        .terminal-button {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-        }
-
-        .terminal-button.close {
-            background: #ff5f56;
-        }
-
-        .terminal-button.minimize {
-            background: #ffbd2e;
-        }
-
-        .terminal-button.maximize {
-            background: #00FFFF;
-        }
-
-        .terminal-title {
-            flex: 1;
-            text-align: center;
-            color: #00FFFF;
-            font-size: 14px;
-            text-shadow: 0 0 10px #00FFFF;
-        }
-
-        .ascii-owl {
-            color: #00FFFF;
-            font-size: 10px;
-            line-height: 1.2;
-            text-shadow: 0 0 5px #00FFFF;
-            white-space: pre;
-            text-align: center;
-            margin-bottom: 20px;
-            animation: owlGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes owlGlow {
-
-            0%,
-            100% {
-                opacity: 0.8;
-            }
-
-            50% {
-                opacity: 1;
-                text-shadow: 0 0 15px #00FFFF;
-            }
-        }
-
-        .main-title {
-            color: #00FFFF;
-            font-size: 48px;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 10px;
-            text-shadow: 0 0 20px #00FFFF,
-                0 0 40px #00BFFF;
-            animation: titlePulse 2s ease-in-out infinite;
-        }
-
-        @keyframes titlePulse {
-
-            0%,
-            100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.02);
-            }
-        }
-
-        .tagline {
-            color: #00BFFF;
-            font-size: 18px;
-            text-align: center;
-            margin-bottom: 20px;
-            opacity: 0.8;
-        }
-
-        .code-block {
-            color: #00BFFF;
-            font-size: 14px;
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(0, 191, 255, 0.05);
-            border-left: 3px solid #00FFFF;
-            line-height: 1.6;
-        }
-
-        .cursor {
-            display: inline-block;
-            width: 10px;
-            height: 20px;
-            background: #00FFFF;
-            margin-left: 5px;
-            animation: blink 1s step-end infinite;
-        }
-
-        @keyframes blink {
-            50% {
-                opacity: 0;
-            }
-        }
-
-        .status {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(0, 191, 255, 0.3);
-            font-size: 12px;
-            color: #00BFFF;
-            opacity: 0.7;
-        }
-
-        .glitch {
-            position: relative;
-        }
-
-        .glitch::before,
-        .glitch::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        .glitch::before {
-            left: 2px;
-            text-shadow: -2px 0 #4A9EFF;
-            animation: glitch1 0.3s infinite;
-        }
-
-        .glitch::after {
-            left: -2px;
-            text-shadow: 2px 0 #00BFFF;
-            animation: glitch2 0.3s infinite;
-        }
-
-        @keyframes glitch1 {
-
-            0%,
-            100% {
-                clip-path: inset(40% 0 43% 0);
-            }
-
-            50% {
-                clip-path: inset(54% 0 23% 0);
-            }
-        }
-
-        @keyframes glitch2 {
-
-            0%,
-            100% {
-                clip-path: inset(10% 0 75% 0);
-            }
-
-            50% {
-                clip-path: inset(60% 0 15% 0);
-            }
-        }
-    </style>
+    <meta name="description" content="NoctuaCoder - Interactive Matrix Terminal. Code by night, create by instinct.">
+    <meta name="keywords" content="terminal, matrix, cyberpunk, interactive, portfolio, noctuacoder">
+    <meta name="author" content="NoctuaCoder">
+    <meta name="theme-color" content="#00FFFF">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="NoctuaCoder - Matrix Owl Terminal">
+    <meta property="og:description" content="Interactive cyberpunk terminal experience">
+    <meta property="og:type" content="website">
+    
+    <title>NoctuaCoder - Matrix Owl Terminal</title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <!-- Matrix Rain Canvas -->
     <canvas id="matrix"></canvas>
 
+    <!-- Terminal Content -->
     <div class="content">
         <div class="terminal" id="terminal-window">
+            <!-- Terminal Header -->
             <div class="terminal-header">
                 <div class="terminal-buttons">
-                    <div class="terminal-button close" onclick="window.location.href='portfolio.html'"></div>
+                    <div class="terminal-button close" onclick="window.location.href='https://noctuacoder.github.io'"></div>
                     <div class="terminal-button minimize"></div>
                     <div class="terminal-button maximize"></div>
                 </div>
                 <div class="terminal-title">noctuacoder@github:~$</div>
             </div>
 
+            <!-- Terminal Body -->
             <div class="terminal-body" id="terminal-output">
-                <div class="ascii-owl">
-                    ___
-                    (o,o)
-                    {`"'}
-                    -"-"-
-                </div>
+                <div class="ascii-owl">   ___
+  (o,o)
+  {`"'}
+  -"-"-</div>
 
                 <div class="main-title glitch" data-text="NoctuaCoder">NoctuaCoder</div>
 
@@ -271,6 +53,7 @@
                 <br>
             </div>
 
+            <!-- Input Line -->
             <div class="input-line">
                 <span class="prompt">noctuacoder@github:~$</span>
                 <input type="text" id="command-input" autocomplete="off" spellcheck="false" autofocus>
@@ -280,311 +63,44 @@
             <audio id="key-sound"
                 src="data:audio/wav;base64,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"
                 style="display:none"></audio>
+        </div>
+    </div>
 
-            <style>
-                .terminal-body {
-                    max-height: 400px;
-                    overflow-y: auto;
-                    margin-bottom: 10px;
-                    scrollbar-width: none;
-                    /* Firefox */
-                }
+    <!-- UI Controls -->
+    <div class="controls">
+        <button class="control-btn" onclick="cycleTheme()">🎨 Theme</button>
+        <button class="control-btn" onclick="toggleSoundUI()">🔊 Sound</button>
+    </div>
 
-                .terminal-body::-webkit-scrollbar {
-                    display: none;
-                    /* Chrome/Safari */
-                }
-
-                .input-line {
-                    display: flex;
-                    align-items: center;
-                    color: #00BFFF;
-                    font-size: 14px;
-                }
-
-                .prompt {
-                    margin-right: 10px;
-                    color: #00FFFF;
-                    text-shadow: 0 0 5px #00FFFF;
-                }
-
-                #command-input {
-                    background: transparent;
-                    border: none;
-                    color: #fff;
-                    font-family: 'Courier New', monospace;
-                    font-size: 14px;
-                    flex: 1;
-                    outline: none;
-                    caret-color: #00FFFF;
-                }
-
-                .output-line {
-                    margin-bottom: 5px;
-                    line-height: 1.5;
-                    color: #a0b0c0;
-                    font-size: 14px;
-                }
-
-                .command-echo {
-                    color: #fff;
-                    margin-top: 10px;
-                    margin-bottom: 5px;
-                }
-
-                .success {
-                    color: #00FFFF;
-                }
-
-                .error {
-                    color: #ff5f56;
-                }
-
-                .info {
-                    color: #00BFFF;
-                }
-
-                /* Link styling in terminal */
-                .term-link {
-                    color: #00FFFF;
-                    text-decoration: none;
-                    border-bottom: 1px dashed #00FFFF;
-                    transition: all 0.2s;
-                    cursor: pointer;
-                }
-
-                .term-link:hover {
-                    background: rgba(0, 255, 255, 0.1);
-                }
-            </style>
-
-            <script>
-                // --- Matrix Rain Effect ---
-                const canvas = document.getElementById('matrix');
-                const ctx = canvas.getContext('2d');
-
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-
-                const chars = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                const charArray = chars.split('');
-
-                const fontSize = 14;
-                const columns = canvas.width / fontSize;
-                const drops = Array(Math.floor(columns)).fill(1);
-
-                let matrixColor = '#00FFFF'; // Default cyan
-
-                function draw() {
-                    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                    ctx.font = fontSize + 'px monospace';
-
-                    for (let i = 0; i < drops.length; i++) {
-                        const char = charArray[Math.floor(Math.random() * charArray.length)];
-                        const x = i * fontSize;
-                        const y = drops[i] * fontSize;
-
-                        // Random brightness
-                        const brightness = Math.random();
-                        if (brightness > 0.95) {
-                            ctx.fillStyle = '#FFFFFF';
-                        } else {
-                            ctx.fillStyle = matrixColor;
-                        }
-
-                        ctx.fillText(char, x, y);
-
-                        if (y > canvas.height && Math.random() > 0.975) {
-                            drops[i] = 0;
-                        }
-
-                        drops[i]++;
-                    }
-                }
-
-                setInterval(draw, 35);
-
-                window.addEventListener('resize', () => {
-                    canvas.width = window.innerWidth;
-                    canvas.height = window.innerHeight;
-                });
-
-                // --- Terminal Logic ---
-                const input = document.getElementById('command-input');
-                const output = document.getElementById('terminal-output');
-                const terminalWindow = document.getElementById('terminal-window');
-
-                // Focus input anywhere on click
-                document.addEventListener('click', () => input.focus());
-
-                // File System Mock
-                const fileSystem = {
-                    'about.txt': "I am NoctuaCoder, a digital alchemist crafting celestial web experiences.",
-                    'skills.txt': "HTML, CSS, JavaScript, React, Hyprland, Linux, Bash",
-                    'contact.txt': "Email: 38922657+NoctuaCoder@users.noreply.github.com\nGitHub: github.com/NoctuaCoder"
-                };
-
-                const commands = {
-                    'help': {
-                        desc: 'List available commands',
-                        action: () => {
-                            printOutput("Available commands:", "info");
-                            printOutput("  help      - Show this help message");
-                            printOutput("  whoami    - About the user");
-                            printOutput("  projects  - List featured projects");
-                            printOutput("  ls        - List files");
-                            printOutput("  cat [file]- Read a file");
-                            printOutput("  clear     - Clear terminal");
-                            printOutput("  date      - Show current date/time");
-                            printOutput("  exit      - Return to portfolio");
-                        }
-                    },
-                    'whoami': {
-                        desc: 'About user',
-                        action: () => {
-                            printOutput("User: NoctuaCoder", "success");
-                            printOutput("Role: Creative Developer & Dotfiles Architect");
-                            printOutput("Mission: To beautify the digital universe, one pixel at a time.");
-                        }
-                    },
-                    'projects': {
-                        desc: 'List projects',
-                        action: () => {
-                            printOutput("Fetching projects from GitHub...", "info");
-                            setTimeout(() => {
-                                printOutput("1. Stellar Dots - Premium Hyprland Configs", "success");
-                                printOutput("   <a class='term-link' href='https://github.com/NoctuaCoder/stellar-dots' target='_blank'>[View Repo]</a>");
-                                printOutput("2. SpectraHypr - Ethereal Aesthetics", "success");
-                                printOutput("   <a class='term-link' href='https://github.com/NoctuaCoder/SpectraHypr' target='_blank'>[View Repo]</a>");
-                                printOutput("3. Midnight Dots - Cyberpunk Theme", "success");
-                                printOutput("   <a class='term-link' href='https://github.com/NoctuaCoder/midnight-dots' target='_blank'>[View Repo]</a>");
-                            }, 500);
-                        }
-                    },
-                    'ls': {
-                        desc: 'List files',
-                        action: () => {
-                            printOutput(Object.keys(fileSystem).join('  '), "info");
-                        }
-                    },
-                    'cat': {
-                        desc: 'Read file',
-                        action: (args) => {
-                            if (!args[0]) {
-                                printOutput("Usage: cat [filename]", "error");
-                                return;
-                            }
-                            const file = args[0];
-                            if (fileSystem[file]) {
-                                printOutput(fileSystem[file]);
-                            } else {
-                                printOutput(`cat: ${file}: No such file or directory`, "error");
-                            }
-                        }
-                    },
-                    'clear': {
-                        desc: 'Clear screen',
-                        action: () => {
-                            output.innerHTML = '';
-                        }
-                    },
-                    'date': {
-                        desc: 'Show date',
-                        action: () => {
-                            printOutput(new Date().toString());
-                        }
-                    },
-                    'exit': {
-                        desc: 'Exit terminal',
-                        action: () => {
-                            printOutput("Terminating session...", "error");
-                            setTimeout(() => {
-                                window.location.href = 'portfolio.html';
-                            }, 1000);
-                        }
-                    },
-                    // Easter Eggs
-                    'matrix': {
-                        desc: 'Change matrix color',
-                        action: (args) => {
-                            if (args[0]) {
-                                matrixColor = args[0];
-                                printOutput(`Matrix color changed to ${args[0]}`, "success");
-                            } else {
-                                printOutput("Usage: matrix [color] (e.g., matrix red, matrix #00FF00)", "info");
-                            }
-                        }
-                    },
-                    'owl': {
-                        desc: 'Owl magic',
-                        action: () => {
-                            printOutput("Hoot hoot! 🦉", "success");
-                            document.querySelector('.ascii-owl').style.color = '#FF00FF';
-                            setTimeout(() => {
-                                document.querySelector('.ascii-owl').style.color = '#00FFFF';
-                            }, 2000);
-                        }
-                    },
-                    'sudo': {
-                        desc: 'Admin access',
-                        action: () => {
-                            printOutput("Permission denied: You are not root. Nice try though.", "error");
-                        }
-                    }
-                };
-
-                input.addEventListener('keydown', (e) => {
-                    // Play sound
-                    const sound = document.getElementById('key-sound');
-                    sound.currentTime = 0;
-                    sound.play().catch(e => { }); // Ignore autoplay errors
-
-                    if (e.key === 'Enter') {
-                        const text = input.value.trim();
-                        if (text) {
-                            // Echo command
-                            const echo = document.createElement('div');
-                            echo.className = 'command-echo';
-                            echo.innerHTML = `<span style="color:#00FFFF">noctuacoder@github:~$</span> ${text}`;
-                            output.appendChild(echo);
-
-                            // Process command
-                            const args = text.split(' ');
-                            const cmd = args.shift().toLowerCase();
-
-                            if (commands[cmd]) {
-                                commands[cmd].action(args);
-                            } else {
-                                printOutput(`Command not found: ${cmd}. Type 'help' for list.`, "error");
-                            }
-
-                            input.value = '';
-                            scrollToBottom();
-                        }
-                    }
-                });
-
-                function printOutput(text, type = '') {
-                    const line = document.createElement('div');
-                    line.className = `output-line ${type}`;
-                    line.innerHTML = text; // Allow HTML for links
-                    output.appendChild(line);
-                    scrollToBottom();
-                }
-
-                function scrollToBottom() {
-                    output.scrollTop = output.scrollHeight;
-                }
-
-                // Initial greeting
-                setTimeout(() => {
-                    // printOutput("Welcome to Noctua Terminal v1.0.0", "info");
-                    // printOutput("Type 'help' to see available commands.");
-                }, 1000);
-
-            </script>
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="themes.js"></script>
+    <script src="animations.js"></script>
+    <script src="audio.js"></script>
+    <script src="matrix.js"></script>
+    <script src="script.js"></script>
+    
+    <script>
+        // UI Control Functions
+        function cycleTheme() {
+            const themeKeys = Object.keys(themes);
+            const currentIndex = themeKeys.indexOf(currentTheme);
+            const nextIndex = (currentIndex + 1) % themeKeys.length;
+            const nextTheme = themeKeys[nextIndex];
+            
+            applyTheme(nextTheme);
+            printOutput(`Theme changed to: ${themes[nextTheme].name}`, 'success');
+            flashMatrixRain();
+            playSuccessSound();
+        }
+        
+        function toggleSoundUI() {
+            toggleSound(!config.soundEnabled);
+            const btn = event.target;
+            btn.textContent = config.soundEnabled ? '🔊 Sound' : '🔇 Muted';
+            printOutput(`Sound ${config.soundEnabled ? 'enabled' : 'disabled'}`, 'info');
+        }
+    </script>
 </body>
 
 </html>

@@ -1,0 +1,433 @@
+/* Matrix Owl Terminal - Main Styles */
+
+/* CSS Custom Properties for theming */
+:root {
+    --primary-color: #00FFFF;
+    --secondary-color: #00BFFF;
+    --background-color: #000;
+    --terminal-bg: rgba(0, 0, 0, 0.85);
+    --text-color: #a0b0c0;
+    --border-color: #00BFFF;
+    --glow-color: rgba(0, 191, 255, 0.5);
+    --error-color: #ff5f56;
+    --success-color: #00FFFF;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--background-color);
+    overflow: hidden;
+    font-family: 'Courier New', monospace;
+    transition: background-color 0.5s ease;
+}
+
+canvas {
+    display: block;
+    background: var(--background-color);
+    transition: opacity 0.3s ease;
+}
+
+.content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.terminal {
+    background: var(--terminal-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    padding: 30px 40px;
+    box-shadow: 0 0 30px var(--glow-color),
+        inset 0 0 20px var(--glow-color);
+    max-width: 700px;
+    width: 90%;
+    animation: terminalBoot 0.5s ease-out;
+    pointer-events: auto;
+    transition: all 0.5s ease;
+}
+
+@keyframes terminalBoot {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.terminal-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.terminal-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.terminal-button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.terminal-button:hover {
+    transform: scale(1.2);
+}
+
+.terminal-button.close {
+    background: #ff5f56;
+}
+
+.terminal-button.minimize {
+    background: #ffbd2e;
+}
+
+.terminal-button.maximize {
+    background: var(--primary-color);
+}
+
+.terminal-title {
+    flex: 1;
+    text-align: center;
+    color: var(--primary-color);
+    font-size: 14px;
+    text-shadow: 0 0 10px var(--primary-color);
+}
+
+.ascii-owl {
+    color: var(--primary-color);
+    font-size: 10px;
+    line-height: 1.2;
+    text-shadow: 0 0 5px var(--primary-color);
+    white-space: pre;
+    text-align: center;
+    margin-bottom: 20px;
+    animation: owlGlow 3s ease-in-out infinite;
+    transition: color 0.5s ease;
+}
+
+@keyframes owlGlow {
+    0%, 100% {
+        opacity: 0.8;
+    }
+    50% {
+        opacity: 1;
+        text-shadow: 0 0 15px var(--primary-color);
+    }
+}
+
+.main-title {
+    color: var(--primary-color);
+    font-size: 48px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+    text-shadow: 0 0 20px var(--primary-color),
+        0 0 40px var(--secondary-color);
+    animation: titlePulse 2s ease-in-out infinite;
+}
+
+@keyframes titlePulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+}
+
+.tagline {
+    color: var(--secondary-color);
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 20px;
+    opacity: 0.8;
+}
+
+.terminal-body {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) transparent;
+}
+
+.terminal-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.terminal-body::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.terminal-body::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 3px;
+}
+
+.input-line {
+    display: flex;
+    align-items: center;
+    color: var(--secondary-color);
+    font-size: 14px;
+}
+
+.prompt {
+    margin-right: 10px;
+    color: var(--primary-color);
+    text-shadow: 0 0 5px var(--primary-color);
+}
+
+#command-input {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    flex: 1;
+    outline: none;
+    caret-color: var(--primary-color);
+    transition: color 0.3s ease;
+}
+
+.output-line {
+    margin-bottom: 5px;
+    line-height: 1.5;
+    color: var(--text-color);
+    font-size: 14px;
+    opacity: 0;
+    animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+.command-echo {
+    color: #fff;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.success {
+    color: var(--success-color);
+}
+
+.error {
+    color: var(--error-color);
+}
+
+.info {
+    color: var(--secondary-color);
+}
+
+.term-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--primary-color);
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.term-link:hover {
+    background: var(--glow-color);
+}
+
+/* Glitch effect */
+.glitch {
+    position: relative;
+}
+
+.glitch::before,
+.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glitch::before {
+    left: 2px;
+    text-shadow: -2px 0 var(--secondary-color);
+    animation: glitch1 0.3s infinite;
+}
+
+.glitch::after {
+    left: -2px;
+    text-shadow: 2px 0 var(--primary-color);
+    animation: glitch2 0.3s infinite;
+}
+
+@keyframes glitch1 {
+    0%, 100% {
+        clip-path: inset(40% 0 43% 0);
+    }
+    50% {
+        clip-path: inset(54% 0 23% 0);
+    }
+}
+
+@keyframes glitch2 {
+    0%, 100% {
+        clip-path: inset(10% 0 75% 0);
+    }
+    50% {
+        clip-path: inset(60% 0 15% 0);
+    }
+}
+
+/* Shake animation for errors */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+.shake {
+    animation: shake 0.3s ease;
+}
+
+/* Controls UI */
+.controls {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 1000;
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+}
+
+.controls:hover {
+    opacity: 1;
+}
+
+.control-btn {
+    background: var(--terminal-bg);
+    border: 1px solid var(--border-color);
+    color: var(--primary-color);
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px var(--glow-color);
+}
+
+.control-btn:hover {
+    background: var(--glow-color);
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px var(--glow-color);
+}
+
+.control-btn:active {
+    transform: translateY(0);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .terminal {
+        max-width: 95%;
+        padding: 20px;
+        font-size: 12px;
+    }
+
+    .ascii-owl {
+        font-size: 8px;
+    }
+
+    .main-title {
+        font-size: 32px;
+    }
+
+    .tagline {
+        font-size: 14px;
+    }
+
+    #command-input {
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+
+    .terminal-body {
+        max-height: 300px;
+    }
+
+    .controls {
+        top: 10px;
+        right: 10px;
+        gap: 5px;
+    }
+
+    .control-btn {
+        padding: 6px 10px;
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .terminal {
+        border-radius: 5px;
+        padding: 15px;
+    }
+
+    .main-title {
+        font-size: 24px;
+    }
+
+    .tagline {
+        font-size: 12px;
+    }
+}
+
+/* Landscape mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .terminal {
+        max-height: 90vh;
+        padding: 15px 20px;
+    }
+
+    .terminal-body {
+        max-height: 200px;
+    }
+
+    .ascii-owl {
+        font-size: 6px;
+        margin-bottom: 10px;
+    }
+
+    .main-title {
+        font-size: 24px;
+        margin-bottom: 5px;
+    }
+
+    .tagline {
+        font-size: 12px;
+        margin-bottom: 10px;
+    }
+}
