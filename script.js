@@ -67,9 +67,10 @@ const commands = {
             printOutput('  theme [action] - Manage themes (list/[name]/random)');
             printOutput('  sound [action] - Sound controls (on/off/volume)');
             printOutput('  neofetch       - System information');
+            printOutput('  snake          - Play Snake game 🐍');
             printOutput('  exit           - Return to portfolio');
             printOutput('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-            printOutput('Easter eggs: Try "owl", "sudo", "matrix [color]"', 'info');
+            printOutput('Easter eggs: Try "owl", "sudo", "matrix [color]", "hack"', 'info');
         }
     },
 
@@ -377,6 +378,17 @@ const commands = {
                 printOutput('Just kidding! This is just a terminal. 😄', 'success');
                 playSuccessSound();
             }, 2000);
+        }
+    },
+
+    'snake': {
+        desc: 'Play Snake game',
+        action: () => {
+            if (typeof startSnakeGame === 'function') {
+                startSnakeGame();
+            } else {
+                printOutput('Snake game not loaded. Please refresh the page.', 'error');
+            }
         }
     }
 };

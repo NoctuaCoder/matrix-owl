@@ -8,14 +8,14 @@
     <meta name="keywords" content="terminal, matrix, cyberpunk, interactive, portfolio, noctuacoder">
     <meta name="author" content="NoctuaCoder">
     <meta name="theme-color" content="#00FFFF">
-    
+
     <!-- Open Graph -->
     <meta property="og:title" content="NoctuaCoder - Matrix Owl Terminal">
     <meta property="og:description" content="Interactive cyberpunk terminal experience">
     <meta property="og:type" content="website">
-    
+
     <title>NoctuaCoder - Matrix Owl Terminal</title>
-    
+
     <!-- Styles -->
     <link rel="stylesheet" href="style.css">
 </head>
@@ -30,7 +30,8 @@
             <!-- Terminal Header -->
             <div class="terminal-header">
                 <div class="terminal-buttons">
-                    <div class="terminal-button close" onclick="window.location.href='https://noctuacoder.github.io'"></div>
+                    <div class="terminal-button close" onclick="window.location.href='https://noctuacoder.github.io'">
+                    </div>
                     <div class="terminal-button minimize"></div>
                     <div class="terminal-button maximize"></div>
                 </div>
@@ -39,10 +40,10 @@
 
             <!-- Terminal Body -->
             <div class="terminal-body" id="terminal-output">
-                <div class="ascii-owl">   ___
-  (o,o)
-  {`"'}
-  -"-"-</div>
+                <div class="ascii-owl"> ___
+                    (o,o)
+                    {`"'}
+                    -"-"-</div>
 
                 <div class="main-title glitch" data-text="NoctuaCoder">NoctuaCoder</div>
 
@@ -78,8 +79,9 @@
     <script src="animations.js"></script>
     <script src="audio.js"></script>
     <script src="matrix.js"></script>
+    <script src="snake.js"></script>
     <script src="script.js"></script>
-    
+
     <script>
         // UI Control Functions
         function cycleTheme() {
@@ -87,13 +89,13 @@
             const currentIndex = themeKeys.indexOf(currentTheme);
             const nextIndex = (currentIndex + 1) % themeKeys.length;
             const nextTheme = themeKeys[nextIndex];
-            
+
             applyTheme(nextTheme);
             printOutput(`Theme changed to: ${themes[nextTheme].name}`, 'success');
             flashMatrixRain();
             playSuccessSound();
         }
-        
+
         function toggleSoundUI() {
             toggleSound(!config.soundEnabled);
             const btn = event.target;

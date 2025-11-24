@@ -35,6 +35,9 @@ Custom canvas animation with "digital rain" effects that sync with your theme.
 - Rainbow text effects
 - Pulse animations
 
+### 🎮 Snake Game
+Play the classic Snake game right in your terminal! Use WASD or arrow keys to control the snake, eat food to grow, and avoid hitting walls or yourself. Features high score tracking and pause functionality.
+
 ### 🥚 Easter Eggs
 Try finding secret commands! Hints: `owl`, `sudo`, `hack`, `matrix [color]`
 
@@ -87,6 +90,11 @@ sound volume [N]  # Set volume (0-100)
 sound ambient on  # Enable ambient sound
 ```
 
+### Games
+```bash
+snake             # Play Snake game 🐍
+```
+
 ### Special
 ```bash
 exit              # Return to portfolio
@@ -116,6 +124,7 @@ matrix-owl/
 ├── animations.js    # Animation effects
 ├── audio.js         # Web Audio API integration
 ├── matrix.js        # Matrix rain canvas effect
+├── snake.js         # Snake game implementation
 └── README.md        # This file
 ```
 
@@ -150,6 +159,8 @@ Feel free to fork and add your own commands or themes!
 
 ## 💡 Ideas for Expansion
 
+- [x] ~~Snake game~~ ✅ Implemented!
+- [ ] More games (Tetris, Pong, Breakout)
 - [ ] Blog system (`blog list`, `blog read [id]`)
 - [ ] GitHub API integration for live stats
 - [ ] Custom theme creator
