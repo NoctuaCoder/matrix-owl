@@ -405,15 +405,43 @@
 
         function spawnFood() {
             const obstacles = levels[currentLevel].obstacles;
-            do {
+            let valid = false;
+            let attempts = 0;
+
+            // Try random placement 100 times
+            while (!valid && attempts < 100) {
                 food = {
                     x: Math.floor(Math.random() * tileCount),
                     y: Math.floor(Math.random() * tileCount)
                 };
-            } while (
-                snake.some(segment => segment.x === food.x && segment.y === food.y) ||
-                obstacles.some(obs => obs.x === food.x && obs.y === food.y)
-            );
+
+                valid = true;
+
+                // Check snake collision
+                if (snake.some(segment => segment.x === food.x && segment.y === food.y)) {
+                    valid = false;
+                }
+
+                // Check obstacle collision
+                if (valid && obstacles.some(obs => obs.x === food.x && obs.y === food.y)) {
+                    valid = false;
+                }
+
+                attempts++;
+            }
+
+            // Failsafe: if random placement failed, find first empty spot
+            if (!valid) {
+                for (let x = 0; x < tileCount; x++) {
+                    for (let y = 0; y < tileCount; y++) {
+                        if (!snake.some(s => s.x === x && s.y === y) &&
+                            !obstacles.some(o => o.x === x && o.y === y)) {
+                            food = { x, y };
+                            return;
+                        }
+                    }
+                }
+            }
         }
 
         function endGame() {
