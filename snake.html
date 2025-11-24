@@ -232,7 +232,8 @@
         const highScoreMsg = document.getElementById('highScoreMsg');
 
         const gridSize = 20;
-        const tileCount = canvas.width / gridSize;
+        const tileCountX = canvas.width / gridSize;
+        const tileCountY = canvas.height / gridSize;
 
         // Level definitions with obstacles
         const levels = [
@@ -291,10 +292,10 @@
             let head = { x: snake[0].x + velocity.x, y: snake[0].y + velocity.y };
 
             // Wall Wrapping (Tunnel Effect)
-            if (head.x < 0) head.x = tileCount - 1;
-            if (head.x >= tileCount) head.x = 0;
-            if (head.y < 0) head.y = tileCount - 1;
-            if (head.y >= tileCount) head.y = 0;
+            if (head.x < 0) head.x = tileCountX - 1;
+            if (head.x >= tileCountX) head.x = 0;
+            if (head.y < 0) head.y = tileCountY - 1;
+            if (head.y >= tileCountY) head.y = 0;
 
             // Check obstacle collision
             const obstacles = levels[currentLevel].obstacles;
@@ -361,11 +362,13 @@
             // Draw grid
             ctx.strokeStyle = 'rgba(0, 255, 255, 0.1)';
             ctx.lineWidth = 1;
-            for (let i = 0; i < tileCount; i++) {
+            for (let i = 0; i < tileCountX; i++) {
                 ctx.beginPath();
                 ctx.moveTo(i * gridSize, 0);
                 ctx.lineTo(i * gridSize, canvas.height);
                 ctx.stroke();
+            }
+            for (let i = 0; i < tileCountY; i++) {
                 ctx.beginPath();
                 ctx.moveTo(0, i * gridSize);
                 ctx.lineTo(canvas.width, i * gridSize);
@@ -421,8 +424,8 @@
                 // Try random placement 100 times
                 while (!valid && attempts < 100) {
                     newFood = {
-                        x: Math.floor(Math.random() * tileCount),
-                        y: Math.floor(Math.random() * tileCount)
+                        x: Math.floor(Math.random() * tileCountX),
+                        y: Math.floor(Math.random() * tileCountY)
                     };
 
                     valid = true;
@@ -447,8 +450,8 @@
 
                 // Failsafe: find first empty spot
                 if (!valid) {
-                    for (let x = 0; x < tileCount; x++) {
-                        for (let y = 0; y < tileCount; y++) {
+                    for (let x = 0; x < tileCountX; x++) {
+                        for (let y = 0; y < tileCountY; y++) {
                             if (!snake.some(s => s.x === x && s.y === y) &&
                                 !obstacles.some(o => o.x === x && o.y === y) &&
                                 !foods.some(f => f.x === x && f.y === y)) {
