@@ -460,8 +460,12 @@ function initTerminal() {
             playTypingSound();
         }
 
-        // Command history navigation
+        // Command history navigation (disabled when Snake is running)
         if (e.key === 'ArrowUp') {
+            // Don't prevent default if Snake game is active
+            if (typeof currentSnakeGame !== 'undefined' && currentSnakeGame && !currentSnakeGame.gameOver) {
+                return; // Let Snake handle it
+            }
             e.preventDefault();
             const history = getHistory();
             if (history.length > 0) {
@@ -469,6 +473,10 @@ function initTerminal() {
                 input.value = history[historyIndex];
             }
         } else if (e.key === 'ArrowDown') {
+            // Don't prevent default if Snake game is active
+            if (typeof currentSnakeGame !== 'undefined' && currentSnakeGame && !currentSnakeGame.gameOver) {
+                return; // Let Snake handle it
+            }
             e.preventDefault();
             const history = getHistory();
             if (historyIndex !== -1) {
