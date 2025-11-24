@@ -5,8 +5,8 @@ class SnakeGame {
     constructor() {
         this.gridWidth = 30;
         this.gridHeight = 15;
-        this.snake = [{ x: 15, y: 7 }];
-        this.direction = { x: 1, y: 0 };
+        this.snake = [{ x: 10, y: 7 }]; // Start more to the left
+        this.direction = { x: 1, y: 0 }; // Moving right
         this.nextDirection = { x: 1, y: 0 };
         this.food = this.spawnFood();
         this.score = 0;
@@ -184,11 +184,29 @@ class SnakeGame {
         this.boundKeyHandler = this.handleKeyPress.bind(this);
         document.addEventListener('keydown', this.boundKeyHandler);
 
-        // Start game loop
-        this.gameLoop = setInterval(() => {
-            this.update();
+        // Add countdown before starting
+        let countdown = 3;
+        const countdownInterval = setInterval(() => {
             this.renderToTerminal();
-        }, this.speed);
+            if (countdown > 0) {
+                const displays = this.outputElement.querySelectorAll('.snake-game-display');
+                if (displays.length > 0) {
+                    const lastDisplay = displays[displays.length - 1];
+                    const countdownDiv = document.createElement('div');
+                    countdownDiv.style.cssText = 'text-align: center; font-size: 24px; color: var(--primary-color); margin-top: 10px;';
+                    countdownDiv.textContent = `Starting in ${countdown}...`;
+                    lastDisplay.appendChild(countdownDiv);
+                }
+                countdown--;
+            } else {
+                clearInterval(countdownInterval);
+                // Start game loop after countdown
+                this.gameLoop = setInterval(() => {
+                    this.update();
+                    this.renderToTerminal();
+                }, this.speed);
+            }
+        }, 1000);
     }
 
     handleKeyPress(e) {
