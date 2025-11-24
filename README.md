@@ -173,6 +173,18 @@ Feel free to fork and add your own commands or themes!
 
 This project is open source and available under the MIT License.
 
+## 📊 GitHub Stats
+
+<div align="center">
+
+[![NoctuaCoder's GitHub Stats](https://github-readme-stats.vercel.app/api?username=NoctuaCoder&show_icons=true&hide_border=true&bg_color=0a0a0a&title_color=00ffff&icon_color=00bfff&text_color=ffffff&count_private=true)](https://github.com/NoctuaCoder)
+
+[![NoctuaCoder's Streak](https://github-readme-streak-stats.herokuapp.com/?user=NoctuaCoder&hide_border=true&background=0a0a0a&ring=00ffff&fire=00bfff&currStreakLabel=00ffff&currStreakNum=ffffff&sideNums=ffffff&sideLabels=00ffff&dates=ffffff)](https://github.com/NoctuaCoder)
+
+[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=NoctuaCoder&layout=compact&hide_border=true&bg_color=0a0a0a&title_color=00ffff&text_color=ffffff)](https://github.com/NoctuaCoder)
+
+</div>
+
 ## 🦉 About NoctuaCoder
 
 Digital Alchemist crafting celestial web experiences.
