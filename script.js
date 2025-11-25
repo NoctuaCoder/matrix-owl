@@ -368,16 +368,12 @@ const commands = {
     },
 
     'hack': {
-        desc: 'Hacking simulation',
+        desc: 'Enter hacker mode',
         action: () => {
-            printOutput('Initializing hack sequence...', 'success');
-            setTimeout(() => printOutput('Accessing mainframe...', 'info'), 500);
-            setTimeout(() => printOutput('Bypassing firewall...', 'info'), 1000);
-            setTimeout(() => printOutput('Downloading data...', 'info'), 1500);
+            printOutput('Initializing HACKER MODE...', 'error');
             setTimeout(() => {
-                printOutput('Just kidding! This is just a terminal. ', 'success');
-                playSuccessSound();
-            }, 2000);
+                startHackerMode();
+            }, 1000);
         }
     },
 
@@ -499,5 +495,103 @@ function initTerminal() {
     }, 500);
 }
 
+// Draggable Window Logic
+function initDraggable() {
+    const terminal = document.getElementById('terminal-window');
+    const header = document.getElementById('drag-handle');
+    let isDragging = false;
+    let currentX;
+    let currentY;
+    let initialX;
+    let initialY;
+    let xOffset = 0;
+    let yOffset = 0;
+
+    header.addEventListener('mousedown', dragStart);
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', dragEnd);
+
+    function dragStart(e) {
+        initialX = e.clientX - xOffset;
+        initialY = e.clientY - yOffset;
+
+        if (e.target === header || e.target.parentNode === header) {
+            isDragging = true;
+        }
+    }
+
+    function drag(e) {
+        if (isDragging) {
+            e.preventDefault();
+            currentX = e.clientX - initialX;
+            currentY = e.clientY - initialY;
+
+            xOffset = currentX;
+            yOffset = currentY;
+
+            setTranslate(currentX, currentY, terminal);
+        }
+    }
+
+    function setTranslate(xPos, yPos, el) {
+        el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+    }
+
+    function dragEnd(e) {
+        initialX = currentX;
+        initialY = currentY;
+        isDragging = false;
+    }
+}
+
+// Hacker Mode Effect
+function startHackerMode() {
+    const output = document.getElementById('terminal-output');
+    const codeSnippets = [
+        'struct group_info init_groups = { .usage = ATOMIC_INIT(2) };',
+        'export void __init_waitqueue_head(wait_queue_head_t *q, const char *name, struct lock_class_key *key) {',
+        '   spin_lock_init(&q->lock);',
+        '   lockdep_set_class_and_name(&q->lock, key, name);',
+        '   INIT_LIST_HEAD(&q->task_list);',
+        '}',
+        'void __wake_up(wait_queue_head_t *q, unsigned int mode, int nr_exclusive, void *key) {',
+        '   unsigned long flags;',
+        '   spin_lock_irqsave(&q->lock, flags);',
+        '   __wake_up_common(q, mode, nr_exclusive, 0, key);',
+        '   spin_unlock_irqrestore(&q->lock, flags);',
+        '}',
+        '// Bypassing mainframe security protocols...',
+        '// Injecting payload...',
+        '// Access granted.',
+        '// Downloading sensitive data...',
+        '// Encrypting local storage...'
+    ];
+
+    let i = 0;
+    const interval = setInterval(() => {
+        if (i >= 100) { // Stop after 100 lines
+            clearInterval(interval);
+            printOutput('Hacker mode deactivated.', 'success');
+            return;
+        }
+
+        const randomLine = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
+        const line = document.createElement('div');
+        line.style.color = '#00FF00';
+        line.style.fontFamily = 'monospace';
+        line.style.fontSize = '12px';
+        line.textContent = randomLine;
+        output.appendChild(line);
+        output.scrollTop = output.scrollHeight;
+
+        if (config.soundEnabled && i % 3 === 0) playTypingSound();
+
+        i++;
+    }, 50);
+}
+
 // Initialize on DOM ready
-document.addEventListener('DOMContentLoaded', initTerminal);
+document.addEventListener('DOMContentLoaded', () => {
+    initTerminal();
+    initDraggable();
+});

@@ -1,20 +1,25 @@
-// Boot Sequence - Epic System Initialization
+// Boot Sequence - Realistic BIOS & System Init
 class BootSequence {
     constructor() {
         this.steps = [
-            { text: 'NOCTUA OS v2.0 CYBERPUNK EDITION', delay: 500, type: 'title' },
-            { text: '', delay: 300 },
-            { text: '[✓] Loading kernel modules...', delay: 400, type: 'success' },
-            { text: '[✓] Initializing matrix rain engine...', delay: 500, type: 'success' },
-            { text: '[✓] Connecting to neural network...', delay: 600, type: 'success' },
-            { text: '[✓] Calibrating quantum processors...', delay: 450, type: 'success' },
-            { text: '[✓] Establishing secure connection...', delay: 550, type: 'success' },
-            { text: '[✓] Loading particle system...', delay: 400, type: 'success' },
-            { text: '', delay: 300 },
-            { text: 'Initializing system...', delay: 200, type: 'info', progress: true },
-            { text: '', delay: 1500 }, // Progress bar time
-            { text: 'SYSTEM READY', delay: 500, type: 'ready' },
-            { text: 'Welcome, Commander.', delay: 300, type: 'welcome' }
+            { text: 'NOCTUA BIOS v2.4.0 (c) 2024 Noctua Systems Inc.', delay: 200, type: 'bios' },
+            { text: 'CPU: Quantum Core i9-9900K @ 5.0GHz', delay: 100, type: 'bios' },
+            { text: 'Memory Test: ', delay: 100, type: 'bios', memoryCheck: true },
+            { text: '', delay: 1500 }, // Wait for memory check
+            { text: 'Detecting Primary Master ... Noctua SSD 2TB', delay: 200, type: 'bios' },
+            { text: 'Detecting Primary Slave  ... None', delay: 100, type: 'bios' },
+            { text: 'Booting from Primary Master...', delay: 500, type: 'bios' },
+            { text: '', delay: 500 },
+            { text: 'Loading Kernel...', delay: 300, type: 'info', progress: true },
+            { text: '', delay: 1200 },
+            { text: '[ OK ] Mounted root filesystem', delay: 100, type: 'success' },
+            { text: '[ OK ] Started Network Manager', delay: 100, type: 'success' },
+            { text: '[ OK ] Started SSH Daemon', delay: 100, type: 'success' },
+            { text: '[ OK ] Started Matrix Rain Engine', delay: 100, type: 'success' },
+            { text: '[ OK ] Initialized Neural Interface', delay: 100, type: 'success' },
+            { text: 'Starting User Session...', delay: 500, type: 'info' },
+            { text: '', delay: 500 },
+            { text: 'SYSTEM READY', delay: 200, type: 'ready' }
         ];
 
         this.currentStep = 0;
@@ -34,19 +39,21 @@ class BootSequence {
             background: #000;
             z-index: 10000;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Courier New', monospace;
+            align-items: flex-start;
+            justify-content: flex-start;
+            font-family: 'VT323', monospace;
+            padding: 20px;
+            cursor: none;
         `;
 
         this.bootOutput = document.createElement('div');
         this.bootOutput.id = 'boot-output';
         this.bootOutput.style.cssText = `
-            color: #00FFFF;
-            font-size: 16px;
-            line-height: 1.8;
-            max-width: 600px;
-            padding: 40px;
+            color: #a0a0a0;
+            font-size: 20px;
+            line-height: 1.2;
+            width: 100%;
+            max-width: 800px;
         `;
 
         this.bootOverlay.appendChild(this.bootOutput);
@@ -65,45 +72,27 @@ class BootSequence {
 
     async executeStep(step) {
         return new Promise(resolve => {
-            setTimeout(() => {
-                if (step.text) {
+            setTimeout(async () => {
+                if (step.text || step.memoryCheck) {
                     const line = document.createElement('div');
-                    line.style.cssText = `
-                        margin-bottom: 8px;
-                        opacity: 0;
-                        animation: fadeIn 0.3s forwards;
-                    `;
 
-                    if (step.type === 'title') {
-                        line.style.cssText += `
-                            font-size: 24px;
-                            font-weight: bold;
-                            text-align: center;
-                            margin-bottom: 30px;
-                            text-shadow: 0 0 20px #00FFFF;
-                        `;
+                    if (step.type === 'bios') {
+                        line.style.color = '#a0a0a0';
                     } else if (step.type === 'success') {
-                        line.style.color = '#00FF00';
+                        line.innerHTML = `<span style="color: #00FF00">[ OK ]</span> ${step.text.replace('[ OK ] ', '')}`;
                     } else if (step.type === 'ready') {
-                        line.style.cssText += `
-                            font-size: 32px;
-                            font-weight: bold;
-                            text-align: center;
-                            margin-top: 30px;
-                            color: #00FF00;
-                            text-shadow: 0 0 30px #00FF00;
-                            animation: pulse 1s infinite;
-                        `;
-                    } else if (step.type === 'welcome') {
-                        line.style.cssText += `
-                            text-align: center;
-                            font-style: italic;
-                            color: #00BFFF;
-                        `;
+                        line.style.color = '#00FFFF';
+                        line.style.fontWeight = 'bold';
+                        line.style.marginTop = '20px';
+                    } else {
+                        line.textContent = step.text;
                     }
 
-                    line.textContent = step.text;
                     this.bootOutput.appendChild(line);
+
+                    if (step.memoryCheck) {
+                        await this.runMemoryCheck(line);
+                    }
 
                     if (step.progress) {
                         this.createProgressBar();
@@ -114,16 +103,32 @@ class BootSequence {
         });
     }
 
+    async runMemoryCheck(element) {
+        return new Promise(resolve => {
+            let memory = 0;
+            const total = 32768; // 32GB
+            const interval = setInterval(() => {
+                memory += 1024;
+                if (memory > total) {
+                    memory = total;
+                    clearInterval(interval);
+                    element.textContent = `Memory Test: ${memory}MB OK`;
+                    resolve();
+                } else {
+                    element.textContent = `Memory Test: ${memory}MB`;
+                }
+            }, 20);
+        });
+    }
+
     createProgressBar() {
         const progressContainer = document.createElement('div');
         progressContainer.style.cssText = `
-            width: 100%;
-            height: 20px;
-            background: rgba(0, 255, 255, 0.1);
-            border: 1px solid #00FFFF;
-            border-radius: 10px;
-            margin-top: 15px;
-            overflow: hidden;
+            width: 300px;
+            height: 15px;
+            border: 1px solid #a0a0a0;
+            margin-top: 5px;
+            margin-bottom: 10px;
             position: relative;
         `;
 
@@ -131,9 +136,8 @@ class BootSequence {
         progressBar.style.cssText = `
             width: 0%;
             height: 100%;
-            background: linear-gradient(90deg, #00FFFF, #00BFFF);
-            box-shadow: 0 0 20px #00FFFF;
-            animation: fillProgress 1.5s ease-out forwards;
+            background: #a0a0a0;
+            animation: fillProgress 1s ease-out forwards;
         `;
 
         progressContainer.appendChild(progressBar);
@@ -143,11 +147,11 @@ class BootSequence {
     async fadeOut() {
         return new Promise(resolve => {
             setTimeout(() => {
-                this.bootOverlay.style.animation = 'fadeOut 1s forwards';
+                this.bootOverlay.style.animation = 'fadeOut 0.5s forwards';
                 setTimeout(() => {
                     this.bootOverlay.remove();
                     resolve();
-                }, 1000);
+                }, 500);
             }, 1000);
         });
     }
@@ -156,11 +160,6 @@ class BootSequence {
 // Add CSS animations
 const style = document.createElement('style');
 style.textContent = `
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
     @keyframes fadeOut {
         from { opacity: 1; }
         to { opacity: 0; }
@@ -169,11 +168,6 @@ style.textContent = `
     @keyframes fillProgress {
         from { width: 0%; }
         to { width: 100%; }
-    }
-    
-    @keyframes pulse {
-        0%, 100% { opacity: 1; transform: scale(1); }
-        50% { opacity: 0.7; transform: scale(1.05); }
     }
 `;
 document.head.appendChild(style);

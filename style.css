@@ -22,7 +22,8 @@
 body {
     background: var(--background-color);
     overflow: hidden;
-    font-family: 'Courier New', monospace;
+    font-family: 'VT323', monospace;
+    font-size: 18px;
     transition: background-color 0.5s ease;
 }
 
@@ -70,23 +71,13 @@ canvas {
     padding: 30px 40px;
     box-shadow: 0 0 30px var(--glow-color),
         inset 0 0 20px var(--glow-color);
-    max-width: 700px;
+    max-width: 800px;
     width: 90%;
     animation: terminalBoot 0.5s ease-out;
     pointer-events: auto;
-    transition: all 0.5s ease;
-}
-
-@keyframes terminalBoot {
-    from {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    position: absolute;
+    /* Required for dragging */
 }
 
 .terminal-header {
@@ -95,6 +86,12 @@ canvas {
     margin-bottom: 20px;
     padding-bottom: 15px;
     border-bottom: 1px solid var(--border-color);
+    cursor: grab;
+    /* Drag cursor */
+}
+
+.terminal-header:active {
+    cursor: grabbing;
 }
 
 .terminal-buttons {
@@ -228,8 +225,8 @@ canvas {
     background: transparent;
     border: none;
     color: var(--text-color);
-    font-family: 'Courier New', monospace;
-    font-size: 14px;
+    font-family: 'VT323', monospace;
+    font-size: 20px;
     flex: 1;
     outline: none;
     caret-color: var(--primary-color);
