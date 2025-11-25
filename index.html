@@ -80,8 +80,8 @@
 
     <!-- UI Controls -->
     <div class="controls">
-        <button class="control-btn" onclick="cycleTheme()">🎨 Theme</button>
-        <button class="control-btn" onclick="toggleSoundUI()">🔊 Sound</button>
+        <button class="control-btn" onclick="cycleTheme()">◐ Theme</button>
+        <button class="control-btn" onclick="toggleSoundUI()">◉ Sound</button>
     </div>
 
     <!-- Scripts -->
@@ -90,6 +90,9 @@
     <script src="animations.js"></script>
     <script src="audio.js"></script>
     <script src="matrix.js"></script>
+    <script src="shortcuts.js"></script>
+    <script src="autocomplete.js"></script>
+    <script src="history-manager.js"></script>
     <script src="script.js"></script>
 
     <script>
@@ -109,7 +112,7 @@
         function toggleSoundUI() {
             toggleSound(!config.soundEnabled);
             const btn = event.target;
-            btn.textContent = config.soundEnabled ? '🔊 Sound' : '🔇 Muted';
+            btn.textContent = config.soundEnabled ? '◉ Sound' : '◌ Muted';
             printOutput(`Sound ${config.soundEnabled ? 'enabled' : 'disabled'}`, 'info');
         }
     </script>

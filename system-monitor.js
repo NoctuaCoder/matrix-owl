@@ -23,7 +23,7 @@ class SystemMonitor {
         hud.className = 'system-hud hidden';
         hud.innerHTML = `
             <div class="hud-header">
-                <span class="hud-title">⚡ SYSTEM MONITOR</span>
+                <span class="hud-title">◆ SYSTEM MONITOR</span>
                 <button class="hud-close" onclick="systemMonitor.toggle()">×</button>
             </div>
             

@@ -21,9 +21,9 @@ Specializing in premium dotfiles, ethereal UI/UX, and cyberpunk aesthetics.
 
     'contact.txt': `Contact Information:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📧 Email: 38922657+NoctuaCoder@users.noreply.github.com
-🐙 GitHub: github.com/NoctuaCoder
-🌐 Portfolio: noctuacoder.github.io/NoctuaCoder/portfolio.html
+◉ Email: 38922657+NoctuaCoder@users.noreply.github.com
+◆ GitHub: github.com/NoctuaCoder
+◎ Portfolio: noctuacoder.github.io/NoctuaCoder/portfolio.html
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
 
     'projects.txt': `Featured Projects:
@@ -67,7 +67,7 @@ const commands = {
             printOutput('  theme [action] - Manage themes (list/[name]/random)');
             printOutput('  sound [action] - Sound controls (on/off/volume)');
             printOutput('  neofetch       - System information');
-            printOutput('  snake          - Play Snake game (opens in new tab) 🐍');
+            printOutput('  snake          - Play Snake game (opens in new tab) ~');
             printOutput('  exit           - Return to portfolio');
             printOutput('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
             printOutput('Easter eggs: Try "owl", "sudo", "matrix [color]", "hack"', 'info');
@@ -89,7 +89,7 @@ const commands = {
         action: () => {
             const asciiArt = `
     ╔═══════════════════════════════════════╗
-    ║         🦉 NoctuaCoder 🦉            ║
+    ║         N NoctuaCoder N            ║
     ╚═══════════════════════════════════════╝
     
     Digital Alchemist | UI/UX Sorcerer
@@ -116,16 +116,16 @@ const commands = {
             printOutput('Fetching projects from GitHub...', 'info');
             setTimeout(() => {
                 printOutput('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'success');
-                printOutput('1. 🌟 Stellar Dots - Premium Hyprland Configs', 'success');
+                printOutput('1. ◆ Stellar Dots - Premium Hyprland Configs', 'success');
                 printOutput('   <a class="term-link" href="https://github.com/NoctuaCoder/stellar-dots" target="_blank">[View Repo]</a>');
                 printOutput('');
-                printOutput('2. ✨ SpectraHypr - Ethereal Aesthetics', 'success');
+                printOutput('2. ◇ SpectraHypr - Ethereal Aesthetics', 'success');
                 printOutput('   <a class="term-link" href="https://github.com/NoctuaCoder/SpectraHypr" target="_blank">[View Repo]</a>');
                 printOutput('');
-                printOutput('3. 🌙 Midnight Dots - Cyberpunk Theme', 'success');
+                printOutput('3. ◐ Midnight Dots - Cyberpunk Theme', 'success');
                 printOutput('   <a class="term-link" href="https://github.com/NoctuaCoder/midnight-dots" target="_blank">[View Repo]</a>');
                 printOutput('');
-                printOutput('4. 🦉 Matrix Owl - Interactive Terminal', 'success');
+                printOutput('4. N Matrix Owl - Interactive Terminal', 'success');
                 printOutput('   <a class="term-link" href="https://github.com/NoctuaCoder/matrix-owl" target="_blank">[View Repo]</a>');
                 printOutput('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', 'success');
                 playSuccessSound();
@@ -321,7 +321,7 @@ const commands = {
         desc: 'Exit terminal',
         action: () => {
             printOutput('Terminating session...', 'error');
-            printOutput('Goodbye! 🦉', 'info');
+            printOutput('Goodbye! N', 'info');
             setTimeout(() => {
                 window.location.href = 'https://noctuacoder.github.io/NoctuaCoder/portfolio.html';
             }, 1000);
@@ -346,7 +346,7 @@ const commands = {
     'owl': {
         desc: 'Owl magic',
         action: () => {
-            printOutput('Hoot hoot! 🦉✨', 'success');
+            printOutput('Hoot hoot! N◇', 'success');
             const owl = document.querySelector('.ascii-owl');
             rainbowText(owl, 2000);
             pulseElement(owl, 5);
@@ -358,10 +358,10 @@ const commands = {
         desc: 'Admin access',
         action: (args) => {
             if (args.join(' ') === 'rm -rf /') {
-                printOutput('Nice try! But I\'m not falling for that one. 😏', 'error');
+                printOutput('Nice try! But I\'m not falling for that one. ', 'error');
                 shakeElement(document.querySelector('.terminal'));
             } else {
-                printOutput('Permission denied: You are not root. Nice try though. 🦉', 'error');
+                printOutput('Permission denied: You are not root. Nice try though. N', 'error');
             }
             playErrorSound();
         }
@@ -375,7 +375,7 @@ const commands = {
             setTimeout(() => printOutput('Bypassing firewall...', 'info'), 1000);
             setTimeout(() => printOutput('Downloading data...', 'info'), 1500);
             setTimeout(() => {
-                printOutput('Just kidding! This is just a terminal. 😄', 'success');
+                printOutput('Just kidding! This is just a terminal. ', 'success');
                 playSuccessSound();
             }, 2000);
         }
@@ -384,7 +384,7 @@ const commands = {
     'snake': {
         desc: 'Play Snake game',
         action: () => {
-            printOutput('🐍 Opening Snake Game...', 'success');
+            printOutput('~ Opening Snake Game...', 'success');
             printOutput('Game will open in a new tab!', 'info');
             window.open('snake.html', '_blank');
             playSuccessSound();
