@@ -77,6 +77,71 @@ const themes = {
         glow: 'rgba(255, 107, 107, 0.5)',
         error: '#FF0000',
         success: '#FFD700'
+    },
+    tron: {
+        name: 'TRON',
+        primary: '#00D9FF',
+        secondary: '#0066FF',
+        background: '#000000',
+        terminalBg: 'rgba(0, 0, 0, 0.9)',
+        matrixRain: '#00D9FF',
+        text: '#FFFFFF',
+        border: '#00D9FF',
+        glow: 'rgba(0, 217, 255, 0.6)',
+        error: '#FF4444',
+        success: '#00D9FF'
+    },
+    bladerunner: {
+        name: 'Blade Runner',
+        primary: '#FF6B35',
+        secondary: '#6B2D5C',
+        background: '#0D0D0D',
+        terminalBg: 'rgba(13, 13, 13, 0.85)',
+        matrixRain: '#FF6B35',
+        text: '#E8DCC4',
+        border: '#FF6B35',
+        glow: 'rgba(255, 107, 53, 0.5)',
+        error: '#FF0000',
+        success: '#FFD700'
+    },
+    gits: {
+        name: 'Ghost in the Shell',
+        primary: '#00FF41',
+        secondary: '#00CC33',
+        background: '#000000',
+        terminalBg: 'rgba(0, 0, 0, 0.9)',
+        matrixRain: '#00FF41',
+        text: '#33FF66',
+        border: '#00FF41',
+        glow: 'rgba(0, 255, 65, 0.5)',
+        error: '#FF3333',
+        success: '#00FF41'
+    },
+    cp2077: {
+        name: 'Cyberpunk 2077',
+        primary: '#FCE300',
+        secondary: '#00F0FF',
+        background: '#0A0A0A',
+        terminalBg: 'rgba(10, 10, 10, 0.85)',
+        matrixRain: '#FCE300',
+        text: '#FFFFFF',
+        border: '#FCE300',
+        glow: 'rgba(252, 227, 0, 0.5)',
+        error: '#FF003C',
+        success: '#00F0FF'
+    },
+    synthwave: {
+        name: 'Synthwave',
+        primary: '#FF006E',
+        secondary: '#8338EC',
+        background: '#0F0326',
+        terminalBg: 'rgba(15, 3, 38, 0.85)',
+        matrixRain: '#FF006E',
+        text: '#FB5607',
+        border: '#FF006E',
+        glow: 'rgba(255, 0, 110, 0.5)',
+        error: '#FF0000',
+        success: '#00F5FF'
     }
 };
 
