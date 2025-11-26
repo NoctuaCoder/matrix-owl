@@ -423,18 +423,18 @@ class GuessNumberGame {
     }
 }
 
-// Retro Racing Game
+// Simple Top-Down Racing Game
 class RacerGame {
     constructor(container) {
         this.container = container;
         this.canvas = null;
         this.ctx = null;
-        this.playerX = 0.5;
-        this.speed = 0;
-        this.distance = 0;
-        this.cars = [];
+        this.playerX = 5; // Grid position (0-9)
+        this.score = 0;
+        this.obstacles = [];
         this.gameLoop = null;
-        this.keys = {};
+        this.speed = 300; // ms between moves
+        this.roadY = 0; // For scrolling effect
     }
 
     start() {
@@ -442,14 +442,13 @@ class RacerGame {
 <div class="game-container fade-in">
     <div class="gradient-card orange">
         <div class="card-content">
-            <h3 class="card-title">RETRO RACER</h3>
-            <p class="card-description">Use arrow keys: LEFT/RIGHT to steer, UP to accelerate, DOWN to brake</p>
+            <h3 class="card-title">RACER</h3>
+            <p class="card-description">Use LEFT/RIGHT arrows to dodge obstacles</p>
             <div style="margin: 1.5rem 0;">
-                <canvas id="racerCanvas" width="400" height="500" style="border: 2px solid var(--accent-orange); background: #87CEEB; display: block; margin: 0 auto;"></canvas>
+                <canvas id="racerCanvas" width="400" height="600" style="border: 2px solid var(--accent-orange); background: #333; display: block; margin: 0 auto;"></canvas>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span class="card-action">DISTANCE: <span id="racerScore">0</span>m</span>
-                <span class="card-action">SPEED: <span id="racerSpeed">0</span> km/h</span>
+                <span class="card-action">SCORE: <span id="racerScore">0</span></span>
                 <button onclick="window.currentGame.restart()" style="padding: 0.5rem 1rem; background: var(--accent-orange); border: none; color: #000; font-weight: 700; cursor: pointer; border-radius: 4px;">RESTART</button>
             </div>
         </div>
@@ -468,139 +467,153 @@ class RacerGame {
         }, 100);
 
         this.setupControls();
-        this.spawnCar();
-        this.gameLoop = setInterval(() => this.update(), 1000 / 60);
+        this.spawnObstacle();
+        this.gameLoop = setInterval(() => this.update(), this.speed);
     }
 
     setupControls() {
         document.addEventListener('keydown', (e) => {
-            this.keys[e.key] = true;
-        });
-        document.addEventListener('keyup', (e) => {
-            this.keys[e.key] = false;
+            if (e.key === 'ArrowLeft' && this.playerX > 0) {
+                this.playerX--;
+            }
+            if (e.key === 'ArrowRight' && this.playerX < 9) {
+                this.playerX++;
+            }
         });
     }
 
-    spawnCar() {
-        if (Math.random() < 0.02 && this.cars.length < 5) {
-            this.cars.push({
-                x: Math.random(),
-                y: 0,
-                speed: 2 + Math.random() * 3
-            });
+    spawnObstacle() {
+        if (Math.random() < 0.7) { // 70% chance to spawn
+            const lanes = [];
+            const numObstacles = Math.floor(Math.random() * 3) + 1; // 1-3 obstacles
+
+            for (let i = 0; i < numObstacles; i++) {
+                let lane;
+                do {
+                    lane = Math.floor(Math.random() * 10);
+                } while (lanes.includes(lane));
+
+                lanes.push(lane);
+                this.obstacles.push({ x: lane, y: 0 });
+            }
         }
     }
 
     update() {
-        // Controls
-        if (this.keys['ArrowLeft']) this.playerX -= 0.02;
-        if (this.keys['ArrowRight']) this.playerX += 0.02;
-        if (this.keys['ArrowUp']) this.speed = Math.min(this.speed + 0.5, 200);
-        if (this.keys['ArrowDown']) this.speed = Math.max(this.speed - 1, 0);
+        // Move obstacles down
+        this.obstacles = this.obstacles.map(obs => ({
+            ...obs,
+            y: obs.y + 1
+        }));
 
-        // Friction
-        if (!this.keys['ArrowUp'] && !this.keys['ArrowDown']) {
-            this.speed *= 0.98;
+        // Remove off-screen obstacles and increase score
+        const beforeLength = this.obstacles.length;
+        this.obstacles = this.obstacles.filter(obs => obs.y < 15);
+        const removed = beforeLength - this.obstacles.length;
+        if (removed > 0) {
+            this.score += removed;
+            document.getElementById('racerScore').textContent = this.score;
+
+            // Speed up every 10 points
+            if (this.score % 10 === 0 && this.speed > 100) {
+                this.speed -= 20;
+                clearInterval(this.gameLoop);
+                this.gameLoop = setInterval(() => this.update(), this.speed);
+            }
         }
 
-        // Keep player on road
-        this.playerX = Math.max(0.2, Math.min(0.8, this.playerX));
+        // Check collision
+        const playerRow = 13; // Player is at row 13
+        const collision = this.obstacles.some(obs =>
+            obs.x === this.playerX && obs.y === playerRow
+        );
 
-        // Update distance
-        this.distance += this.speed / 100;
-        document.getElementById('racerScore').textContent = Math.floor(this.distance);
-        document.getElementById('racerSpeed').textContent = Math.floor(this.speed);
+        if (collision) {
+            this.gameOver();
+            return;
+        }
 
-        // Update cars
-        this.cars.forEach((car, i) => {
-            car.y += (this.speed + car.speed) / 20;
-            if (car.y > 1) {
-                this.cars.splice(i, 1);
-            }
+        // Spawn new obstacles
+        if (Math.random() < 0.3) {
+            this.spawnObstacle();
+        }
 
-            // Collision detection
-            if (car.y > 0.85 && car.y < 0.95) {
-                if (Math.abs(car.x - this.playerX) < 0.08) {
-                    this.gameOver();
-                }
-            }
-        });
+        // Road scrolling effect
+        this.roadY = (this.roadY + 2) % 40;
 
-        this.spawnCar();
         this.draw();
     }
 
     draw() {
+        const tileSize = 40;
         const w = this.canvas.width;
         const h = this.canvas.height;
 
-        // Sky
-        this.ctx.fillStyle = '#87CEEB';
-        this.ctx.fillRect(0, 0, w, h / 2);
+        // Background
+        this.ctx.fillStyle = '#1a1a1a';
+        this.ctx.fillRect(0, 0, w, h);
 
-        // Ground
-        this.ctx.fillStyle = '#228B22';
-        this.ctx.fillRect(0, h / 2, w, h / 2);
+        // Road
+        this.ctx.fillStyle = '#333';
+        this.ctx.fillRect(0, 0, w, h);
 
-        // Road stripes (perspective)
-        for (let i = 0; i < 20; i++) {
-            const y = (i / 20) * h;
-            const perspective = i / 20;
-            const roadWidth = 100 + perspective * 200;
-            const x = w / 2;
-
-            // Road
-            this.ctx.fillStyle = i % 2 === 0 ? '#555' : '#666';
-            this.ctx.fillRect(x - roadWidth / 2, y, roadWidth, h / 20);
-
-            // Center line
-            if (i % 2 === 0) {
-                this.ctx.fillStyle = '#fff';
-                this.ctx.fillRect(x - 3, y, 6, h / 40);
+        // Road lines
+        this.ctx.fillStyle = '#555';
+        for (let i = 0; i < 10; i++) {
+            for (let j = -1; j < 16; j++) {
+                const y = j * tileSize + this.roadY;
+                if (i === 0 || i === 9) {
+                    // Side lines
+                    this.ctx.fillRect(i * tileSize, y, tileSize, 2);
+                }
+                // Center dashed line
+                if (i === 4 || i === 5) {
+                    if (j % 2 === 0) {
+                        this.ctx.fillRect(i * tileSize + tileSize / 2 - 2, y, 4, tileSize / 2);
+                    }
+                }
             }
         }
 
-        // Other cars
-        this.cars.forEach(car => {
-            const perspective = car.y;
-            const carWidth = 20 + perspective * 40;
-            const carHeight = 30 + perspective * 50;
-            const roadWidth = 100 + perspective * 200;
-            const x = w / 2 + (car.x - 0.5) * roadWidth;
-            const y = h / 2 + perspective * (h / 2);
-
-            this.ctx.fillStyle = '#e91e63';
-            this.ctx.fillRect(x - carWidth / 2, y - carHeight, carWidth, carHeight);
-            this.ctx.fillStyle = '#fff';
-            this.ctx.fillRect(x - carWidth / 2 + 5, y - carHeight + 5, 8, 8);
-            this.ctx.fillRect(x + carWidth / 2 - 13, y - carHeight + 5, 8, 8);
+        // Obstacles
+        this.ctx.fillStyle = '#e91e63';
+        this.ctx.shadowBlur = 10;
+        this.ctx.shadowColor = '#e91e63';
+        this.obstacles.forEach(obs => {
+            this.ctx.fillRect(
+                obs.x * tileSize + 4,
+                obs.y * tileSize + 4,
+                tileSize - 8,
+                tileSize - 8
+            );
         });
+        this.ctx.shadowBlur = 0;
 
         // Player car
-        const playerY = h * 0.9;
-        const playerWidth = 50;
-        const playerHeight = 70;
-        const roadWidth = 100 + 0.9 * 200;
-        const playerScreenX = w / 2 + (this.playerX - 0.5) * roadWidth;
-
+        const playerY = 13;
         this.ctx.fillStyle = '#00d9ff';
         this.ctx.shadowBlur = 15;
         this.ctx.shadowColor = '#00d9ff';
-        this.ctx.fillRect(playerScreenX - playerWidth / 2, playerY - playerHeight, playerWidth, playerHeight);
+        this.ctx.fillRect(
+            this.playerX * tileSize + 4,
+            playerY * tileSize + 4,
+            tileSize - 8,
+            tileSize - 8
+        );
         this.ctx.shadowBlur = 0;
 
         // Headlights
         this.ctx.fillStyle = '#ffff00';
-        this.ctx.fillRect(playerScreenX - playerWidth / 2 + 5, playerY - playerHeight + 5, 12, 12);
-        this.ctx.fillRect(playerScreenX + playerWidth / 2 - 17, playerY - playerHeight + 5, 12, 12);
+        this.ctx.fillRect(this.playerX * tileSize + 8, playerY * tileSize + 8, 6, 6);
+        this.ctx.fillRect(this.playerX * tileSize + tileSize - 14, playerY * tileSize + 8, 6, 6);
     }
 
     gameOver() {
         clearInterval(this.gameLoop);
 
         // Save high score
-        if (this.distance > 0) {
-            window.highScores.saveScore('racer', Math.floor(this.distance));
+        if (this.score > 0) {
+            window.highScores.saveScore('racer', this.score);
         }
 
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
@@ -608,27 +621,26 @@ class RacerGame {
         this.ctx.fillStyle = '#fff';
         this.ctx.font = '30px Orbitron';
         this.ctx.textAlign = 'center';
-        this.ctx.fillText('CRASH!', this.canvas.width / 2, this.canvas.height / 2);
+        this.ctx.fillText('GAME OVER', this.canvas.width / 2, this.canvas.height / 2);
         this.ctx.font = '20px Orbitron';
-        this.ctx.fillText(`Distance: ${Math.floor(this.distance)}m`, this.canvas.width / 2, this.canvas.height / 2 + 40);
+        this.ctx.fillText(`Score: ${this.score}`, this.canvas.width / 2, this.canvas.height / 2 + 40);
 
         const highScore = window.highScores.getHighScore('racer');
-        if (Math.floor(this.distance) === highScore && this.distance > 0) {
+        if (this.score === highScore && this.score > 0) {
             this.ctx.fillStyle = '#00d9ff';
             this.ctx.fillText('NEW HIGH SCORE!', this.canvas.width / 2, this.canvas.height / 2 + 80);
         }
     }
 
     restart() {
-        this.playerX = 0.5;
-        this.speed = 0;
-        this.distance = 0;
-        this.cars = [];
-        this.keys = {};
+        this.playerX = 5;
+        this.score = 0;
+        this.obstacles = [];
+        this.speed = 300;
+        this.roadY = 0;
         document.getElementById('racerScore').textContent = '0';
-        document.getElementById('racerSpeed').textContent = '0';
         clearInterval(this.gameLoop);
-        this.gameLoop = setInterval(() => this.update(), 1000 / 60);
+        this.gameLoop = setInterval(() => this.update(), this.speed);
     }
 }
 
