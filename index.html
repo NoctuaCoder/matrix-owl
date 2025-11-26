@@ -4,14 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="NoctuaCoder - Interactive Matrix Terminal. Code by night, create by instinct.">
-    <meta name="keywords" content="terminal, matrix, cyberpunk, interactive, portfolio, noctuacoder">
+    <meta name="description"
+        content="NoctuaCoder - Celestial Cyberpunk Terminal. Interactive terminal experience with cosmic aesthetics and neon accents.">
+    <meta name="keywords" content="terminal, matrix, cyberpunk, celestial, interactive, portfolio, noctuacoder">
     <meta name="author" content="NoctuaCoder">
-    <meta name="theme-color" content="#00FFFF">
+    <meta name="theme-color" content="#9333ea">
 
     <!-- Open Graph -->
     <meta property="og:title" content="NoctuaCoder - Matrix Owl Terminal">
-    <meta property="og:description" content="Interactive cyberpunk terminal experience">
+    <meta property="og:description" content="Celestial-Cyberpunk Terminal Experience">
     <meta property="og:type" content="website">
 
     <title>NoctuaCoder - Matrix Owl Terminal</title>
@@ -19,52 +20,141 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="hud.css">
-    <link rel="stylesheet" href="glitch-effects.css">
+    <link rel="stylesheet" href="css/celestial.css">
+    <link rel="stylesheet" href="css/terminal.css">
+    <link rel="stylesheet" href="css/animations.css">
 </head>
 
 <body>
-    <!-- Visual Effects Overlays -->
-    <div class="scanlines"></div>
-    <div class="crt-effect"></div>
-    <div class="noise-overlay"></div>
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
 
-    <!-- Particles Background Canvas -->
-    <canvas id="particles-canvas"></canvas>
+    <!-- Particle Background -->
+    <canvas id="particleCanvas"></canvas>
 
-    <!-- Matrix Rain Canvas -->
-    <canvas id="matrix"></canvas>
+    <!-- Matrix Rain (Enhanced) -->
+    <canvas id="matrixCanvas"></canvas>
 
-    <!-- Terminal Content -->
-    <div class="content">
-        <div class="terminal" id="terminal-window">
+    <!-- Main Container -->
+    <div class="terminal-container">
+
+        <!-- Animated SVG Owl -->
+        <div class="owl-container" id="owlContainer">
+            <svg class="owl-svg" id="owlSvg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <!-- Gradient for owl body -->
+                    <linearGradient id="owlGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#9333ea;stop-opacity:1" />
+                        <stop offset="50%" style="stop-color:#ec4899;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+                    </linearGradient>
+
+                    <!-- Glow filter -->
+                    <filter id="glow">
+                        <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                        <feMerge>
+                            <feMergeNode in="coloredBlur" />
+                            <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                    </filter>
+                </defs>
+
+                <!-- Owl Body -->
+                <ellipse cx="100" cy="120" rx="50" ry="60" fill="url(#owlGradient)" filter="url(#glow)"
+                    class="owl-body" />
+
+                <!-- Wings -->
+                <path d="M 50 120 Q 20 100, 30 140 L 50 140 Z" fill="url(#owlGradient)" opacity="0.8"
+                    class="owl-wing-left" />
+                <path d="M 150 120 Q 180 100, 170 140 L 150 140 Z" fill="url(#owlGradient)" opacity="0.8"
+                    class="owl-wing-right" />
+
+                <!-- Head -->
+                <circle cx="100" cy="80" r="40" fill="url(#owlGradient)" filter="url(#glow)" class="owl-head" />
+
+                <!-- Ear Tufts -->
+                <path d="M 70 50 L 65 30 L 75 45 Z" fill="url(#owlGradient)" class="owl-ear-left" />
+                <path d="M 130 50 L 135 30 L 125 45 Z" fill="url(#owlGradient)" class="owl-ear-right" />
+
+                <!-- Eyes (white background) -->
+                <circle cx="85" cy="75" r="12" fill="#ffffff" class="owl-eye-bg-left" />
+                <circle cx="115" cy="75" r="12" fill="#ffffff" class="owl-eye-bg-right" />
+
+                <!-- Pupils (animated) -->
+                <circle cx="85" cy="75" r="6" fill="#0a0a0f" class="owl-pupil-left" id="pupilLeft" />
+                <circle cx="115" cy="75" r="6" fill="#0a0a0f" class="owl-pupil-right" id="pupilRight" />
+
+                <!-- Eyelids (for blinking) -->
+                <ellipse cx="85" cy="75" rx="12" ry="0" fill="url(#owlGradient)" class="owl-eyelid-left"
+                    id="eyelidLeft" />
+                <ellipse cx="115" cy="75" rx="12" ry="0" fill="url(#owlGradient)" class="owl-eyelid-right"
+                    id="eyelidRight" />
+
+                <!-- Beak -->
+                <path d="M 100 85 L 95 95 L 105 95 Z" fill="#ffaa00" class="owl-beak" />
+
+                <!-- Feet -->
+                <ellipse cx="85" cy="175" rx="8" ry="5" fill="#ffaa00" opacity="0.8" />
+                <ellipse cx="115" cy="175" rx="8" ry="5" fill="#ffaa00" opacity="0.8" />
+            </svg>
+        </div>
+
+        <!-- Terminal Window -->
+        <div class="terminal-window" id="terminalWindow">
             <!-- Terminal Header -->
-            <div class="terminal-header" id="drag-handle">
+            <div class="terminal-header">
                 <div class="terminal-buttons">
                     <div class="terminal-button close"
-                        onclick="window.location.href='https://noctuacoder.github.io/NoctuaCoder/portfolio.html'">
-                    </div>
+                        onclick="window.location.href='https://noctuacoder.github.io/NoctuaCoder/portfolio.html'"></div>
                     <div class="terminal-button minimize"></div>
                     <div class="terminal-button maximize"></div>
                 </div>
-                <div class="terminal-title">noctuacoder@github:~$</div>
+                <div class="terminal-title">
+                    <span class="title-icon">🦉</span>
+                    <span>noctuacoder@celestial:~$</span>
+                </div>
+                <div class="terminal-stats">
+                    <span id="terminalTime">00:00:00</span>
+                </div>
             </div>
 
             <!-- Terminal Body -->
-            <div class="terminal-body" id="terminal-output">
-                <pre class="ascii-owl">   ___
-  (o,o)
-  {`"'}
-  -"-"-</pre>
+            <div class="terminal-body" id="terminalOutput">
+                <div class="boot-sequence" id="bootSequence">
+                    <div class="boot-line">
+                        <span class="boot-icon">✨</span>
+                        <span class="boot-text">Initializing Celestial Terminal...</span>
+                    </div>
+                    <div class="boot-line">
+                        <span class="boot-icon">🌌</span>
+                        <span class="boot-text">Loading cosmic particles...</span>
+                    </div>
+                    <div class="boot-line">
+                        <span class="boot-icon">🤖</span>
+                        <span class="boot-text">Activating cyberpunk protocols...</span>
+                    </div>
+                    <div class="boot-line">
+                        <span class="boot-icon">🦉</span>
+                        <span class="boot-text">Owl systems online...</span>
+                    </div>
+                </div>
 
-                <div class="main-title glitch" data-text="NoctuaCoder">NoctuaCoder</div>
-
-                <div class="tagline">
-                    &gt; Code by night. <span style="color: #fff">Type 'help' to start.</span>
+                <div class="welcome-message">
+                    <div class="main-title">
+                        <span class="gradient-text glitch" data-text="NoctuaCoder">NoctuaCoder</span>
+                    </div>
+                    <div class="tagline">
+                        <span class="neon-text">Code by night. Create by instinct.</span>
+                    </div>
+                    <div class="help-hint">
+                        Type <span class="command-highlight">'help'</span> to explore the cosmos
+                    </div>
                 </div>
 
                 <br>
@@ -72,55 +162,95 @@
 
             <!-- Input Line -->
             <div class="input-line">
-                <span class="prompt">noctuacoder@github:~$</span>
-                <input type="text" id="command-input" autocomplete="off" spellcheck="false" autofocus>
+                <span class="prompt">
+                    <span class="prompt-user">noctuacoder</span>
+                    <span class="prompt-separator">@</span>
+                    <span class="prompt-host">celestial</span>
+                    <span class="prompt-path">:~$</span>
+                </span>
+                <input type="text" id="commandInput" autocomplete="off" spellcheck="false" autofocus>
+            </div>
+        </div>
+
+        <!-- HUD Elements -->
+        <div class="hud-container">
+            <!-- Top Right HUD -->
+            <div class="hud-panel hud-top-right">
+                <div class="hud-title">SYSTEM STATUS</div>
+                <div class="hud-content">
+                    <div class="hud-item">
+                        <span class="hud-icon">⏰</span>
+                        <span id="hudTime">00:00:00</span>
+                    </div>
+                    <div class="hud-item">
+                        <span class="hud-icon">🌡️</span>
+                        <span>CPU: <span id="hudCpu">42%</span></span>
+                    </div>
+                    <div class="hud-item">
+                        <span class="hud-icon">💾</span>
+                        <span>RAM: <span id="hudRam">8.2GB</span></span>
+                    </div>
+                    <div class="hud-item">
+                        <span class="hud-icon">🌐</span>
+                        <span class="status-online">ONLINE</span>
+                    </div>
+                </div>
             </div>
 
-            <!-- Audio for typing effect -->
-            <audio id="key-sound"
-                src="data:audio/wav;base64,UklGRl4RAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YToRAAAAAEcHdg51FS0chyJvKNAtmTK6NiU6zzyuPr4/+j9hP/Y9vTu9OAE1lTCHK+klzR9HGW0SVgsZBND8kPVz7pDn/+DU2iXVBNCDy7DHmcRGwsHADsAvwCTB6sJ7xc/I2syO0d3WtdwC46/pp/DR9xf/XwaSDZkUWxvCIbknLC0JMj82wjmEPH4+qD/+P4A/Lz4PPCg5gjUrMTEspCaWIB0aTBM7DAIFuf139lTvaejM4ZPb1NWg0ArMIcjxxIXC5sAYwB/A+sCmwh7FWshPzO/QLNbz2zPi1ejF7+r2Lv52Ba4MuxOHGvsgASeFLHYxwjVcOTc8Sj6OP/8/mz9kPl48jzkBNsAx2SxdJ14h8RoqFCAN6wWi/l73NvBC6ZriVNyE1j7RlMyUyEzFyMIPwSfAE8DTwGXCxMTox8bLUtB81TPbZeH85+PuA/ZE/Y4EyQvdErIZMiBHJtwr4DBCNfM45jsTPnE//D+zP5c+qjz0OX02UTJ+LRQoJSLEGwcVBA7TBoz/RfgY8R3qauMX3TfX39EgzQrJq8UNwzrBOMAJwK/AKMJuxHnHQcu4z8/UddqZ4CXnA+4d9Vv8pQPjCv0R2xhnH4slMStIML80hziSO9g9UT/3P8g/xj7zPFU69jbgMiEuySjpIpYc4xXoDrsHdAAt+fzx+eo85Nvd7NeC0q/Ng8kMxlbDacFNwATAj8DtwRrEDce+yiDPJNS52c7fTuYj7Tf0cvu8Av0JHREEGJsezSSEKq4vOjQYODw7mz0tP+0/2T/xPjg9tDpsN2wzwi58KawjZh2+FsoPogheARX64PLW6w/lot6j2CfTQM7/yXHGosOcwWXAAcBywLbBycOkxj7Kis570//YBd955UXsUvOK+tIBFgk7ECsXzR0NJNQpES+xM6Y34jpaPQY/4T/oPxo/ez0PO9839jNgLywqbSQ0HpcXrBCJCUcC/vrF87Ts4+Vq31zZz9PVzn7K2Mbxw9HBgMACwFjAgsF8wz7Gwcn3zdTSR9g+3qXkZ+tu8qH56QAvCFkPURb+HEsjIylyLiYzMTeFOhY93D7RP/I/Pz+6PWc7UDh9NPwv2yosJQEfcBiNEXAKMAPn+6r0k+255jPgF9p51GvP/8pDx0PECsKfwAbAQsBSwTHD28VGyWfNMNKR13nd0+OL6orxufg="
-                style="display:none"></audio>
+            <!-- Bottom Left HUD -->
+            <div class="hud-panel hud-bottom-left">
+                <div class="hud-title">STATS</div>
+                <div class="hud-content">
+                    <div class="hud-item">
+                        <span>Commands: <span id="hudCommands">0</span></span>
+                    </div>
+                    <div class="hud-item">
+                        <span>Uptime: <span id="hudUptime">0s</span></span>
+                    </div>
+                    <div class="hud-item">
+                        <span>Theme: <span id="hudTheme">Matrix</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control Buttons -->
+        <div class="controls">
+            <button class="control-btn" onclick="cycleTheme()" title="Change Theme">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <span>Theme</span>
+            </button>
+            <button class="control-btn" onclick="toggleSound()" title="Toggle Sound">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                </svg>
+                <span id="soundLabel">Sound</span>
+            </button>
         </div>
     </div>
 
-    <!-- UI Controls -->
-    <div class="controls">
-        <button class="control-btn" onclick="cycleTheme()">◐ Theme</button>
-        <button class="control-btn" onclick="toggleSoundUI()">◉ Sound</button>
-    </div>
-
     <!-- Scripts -->
-    <script src="config.js"></script>
-    <script src="themes.js"></script>
-    <script src="animations.js"></script>
-    <script src="audio.js"></script>
-    <script src="matrix.js"></script>
-    <script src="shortcuts.js"></script>
-    <script src="autocomplete.js"></script>
-    <script src="history-manager.js"></script>
-    <script src="script.js"></script>
-
-    <script>
-        // UI Control Functions
-        function cycleTheme() {
-            const themeKeys = Object.keys(themes);
-            const currentIndex = themeKeys.indexOf(currentTheme);
-            const nextIndex = (currentIndex + 1) % themeKeys.length;
-            const nextTheme = themeKeys[nextIndex];
-
-            applyTheme(nextTheme);
-            printOutput(`Theme changed to: ${themes[nextTheme].name}`, 'success');
-            flashMatrixRain();
-            playSuccessSound();
-        }
-
-        function toggleSoundUI() {
-            toggleSound(!config.soundEnabled);
-            const btn = event.target;
-            btn.textContent = config.soundEnabled ? '◉ Sound' : '◌ Muted';
-            printOutput(`Sound ${config.soundEnabled ? 'enabled' : 'disabled'}`, 'info');
-        }
-    </script>
+    <script src="js/config.js"></script>
+    <script src="js/owl.js"></script>
+    <script src="js/particles.js"></script>
+    <script src="js/matrix.js"></script>
+    <script src="js/cursor.js"></script>
+    <script src="js/hud.js"></script>
+    <script src="js/themes.js"></script>
+    <script src="js/commands.js"></script>
+    <script src="js/terminal.js"></script>
 </body>
 
 </html>

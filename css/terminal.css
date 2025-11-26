@@ -1,0 +1,271 @@
+/* ========================================
+   TERMINAL STYLES
+   Command output, messages, cards
+   ======================================== */
+
+/* Output Styles */
+.output-line {
+    margin-bottom: var(--spacing-xs);
+    animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.output-command {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.output-command .prompt {
+    color: var(--cosmic-purple);
+}
+
+.output-success {
+    color: var(--neon-green);
+}
+
+.output-error {
+    color: #ff5f56;
+    text-shadow: 0 0 5px #ff5f56;
+}
+
+.output-info {
+    color: var(--neon-cyan);
+}
+
+.output-warning {
+    color: var(--neon-yellow);
+}
+
+/* Project Cards */
+.project-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    margin: var(--spacing-sm) 0;
+    transition: all var(--transition-base);
+}
+
+.project-card:hover {
+    background: var(--glass-hover);
+    border-color: var(--cosmic-purple);
+    box-shadow: var(--glow-purple);
+    transform: translateY(-2px);
+}
+
+.project-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+}
+
+.project-card-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.project-card-tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-sm);
+}
+
+.tech-badge {
+    padding: 0.25rem 0.5rem;
+    background: rgba(147, 51, 234, 0.2);
+    border: 1px solid rgba(147, 51, 234, 0.4);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    color: var(--cosmic-purple-light);
+}
+
+.project-card-description {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.6;
+}
+
+.project-card-links {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-md);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    color: var(--neon-cyan);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: all var(--transition-fast);
+}
+
+.project-link:hover {
+    background: var(--glass-hover);
+    border-color: var(--neon-cyan);
+    box-shadow: var(--glow-cyan);
+}
+
+/* Neofetch Style Output */
+.neofetch-container {
+    display: flex;
+    gap: var(--spacing-lg);
+    margin: var(--spacing-md) 0;
+}
+
+.neofetch-logo {
+    flex-shrink: 0;
+}
+
+.neofetch-info {
+    flex: 1;
+}
+
+.neofetch-line {
+    margin-bottom: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.neofetch-label {
+    color: var(--cosmic-purple);
+    font-weight: 600;
+}
+
+.neofetch-value {
+    color: var(--text-secondary);
+}
+
+/* Help Command Styles */
+.help-section {
+    margin: var(--spacing-md) 0;
+}
+
+.help-category {
+    color: var(--stellar-pink);
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+    font-size: 1rem;
+}
+
+.help-command {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xs);
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-sm);
+    transition: background var(--transition-fast);
+}
+
+.help-command:hover {
+    background: var(--glass-bg);
+}
+
+.help-command-name {
+    color: var(--neon-cyan);
+    font-weight: 500;
+    min-width: 120px;
+}
+
+.help-command-desc {
+    color: var(--text-secondary);
+}
+
+/* Loading Animation */
+.loading {
+    display: inline-flex;
+    gap: 0.25rem;
+}
+
+.loading-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--cosmic-purple);
+    border-radius: 50%;
+    animation: loadingBounce 1.4s infinite ease-in-out both;
+}
+
+.loading-dot:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.loading-dot:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes loadingBounce {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0);
+    }
+
+    40% {
+        transform: scale(1);
+    }
+}
+
+/* Links */
+a {
+    color: var(--neon-cyan);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+a:hover {
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px var(--neon-cyan);
+}
+
+/* Code Blocks */
+code {
+    background: rgba(147, 51, 234, 0.1);
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--radius-sm);
+    color: var(--stellar-pink);
+    font-family: 'Fira Code', monospace;
+}
+
+pre {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    overflow-x: auto;
+    margin: var(--spacing-sm) 0;
+}
+
+/* Utility Classes */
+.text-center {
+    text-align: center;
+}
+
+.mt-1 {
+    margin-top: var(--spacing-sm);
+}
+
+.mb-1 {
+    margin-bottom: var(--spacing-sm);
+}
+
+.hidden {
+    display: none !important;
+}
