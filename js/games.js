@@ -38,9 +38,17 @@ class SnakeGame {
         </div>
     </div>
 </div>`;
-        this.container.innerHTML += html;
+        this.container.innerHTML = html;
         this.canvas = document.getElementById('snakeCanvas');
         this.ctx = this.canvas.getContext('2d');
+
+        // Scroll to game
+        setTimeout(() => {
+            const gameContainer = this.container.querySelector('.game-container');
+            if (gameContainer) {
+                gameContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, 100);
     }
 
     setupControls() {
@@ -176,9 +184,17 @@ class TetrisGame {
         </div>
     </div>
 </div>`;
-        this.container.innerHTML += html;
+        this.container.innerHTML = html;
         this.canvas = document.getElementById('tetrisCanvas');
         this.ctx = this.canvas.getContext('2d');
+
+        // Scroll to game
+        setTimeout(() => {
+            const gameContainer = this.container.querySelector('.game-container');
+            if (gameContainer) {
+                gameContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, 100);
 
         this.spawnPiece();
         this.setupControls();
@@ -354,7 +370,15 @@ class GuessNumberGame {
         </div>
     </div>
 </div>`;
-        this.container.innerHTML += html;
+        this.container.innerHTML = html;
+
+        // Scroll to game
+        setTimeout(() => {
+            const gameContainer = this.container.querySelector('.game-container');
+            if (gameContainer) {
+                gameContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, 100);
 
         document.getElementById('guessInput').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') this.makeGuess();
@@ -431,9 +455,17 @@ class RacerGame {
         </div>
     </div>
 </div>`;
-        this.container.innerHTML += html;
+        this.container.innerHTML = html;
         this.canvas = document.getElementById('racerCanvas');
         this.ctx = this.canvas.getContext('2d');
+
+        // Scroll to game
+        setTimeout(() => {
+            const gameContainer = this.container.querySelector('.game-container');
+            if (gameContainer) {
+                gameContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, 100);
 
         this.setupControls();
         this.spawnCar();
@@ -636,9 +668,17 @@ class PongGame {
         </div>
     </div>
 </div>`;
-        this.container.innerHTML += html;
+        this.container.innerHTML = html;
         this.canvas = document.getElementById('pongCanvas');
         this.ctx = this.canvas.getContext('2d');
+
+        // Scroll to game
+        setTimeout(() => {
+            const gameContainer = this.container.querySelector('.game-container');
+            if (gameContainer) {
+                gameContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, 100);
 
         this.setupControls();
         this.gameLoop = setInterval(() => this.update(), 1000 / 60);
@@ -802,9 +842,17 @@ class BreakoutGame {
         </div>
     </div>
 </div>`;
-        this.container.innerHTML += html;
+        this.container.innerHTML = html;
         this.canvas = document.getElementById('breakoutCanvas');
         this.ctx = this.canvas.getContext('2d');
+
+        // Scroll to game
+        setTimeout(() => {
+            const gameContainer = this.container.querySelector('.game-container');
+            if (gameContainer) {
+                gameContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, 100);
 
         this.createBricks();
         this.setupControls();
