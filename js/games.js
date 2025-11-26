@@ -418,7 +418,6 @@ class GuessNumberGame {
         document.getElementById('guessResult').innerHTML = '';
         const input = document.getElementById('guessInput');
         input.disabled = false;
-        ```
         input.value = '';
         input.focus();
     }
@@ -582,7 +581,7 @@ class PongGame {
         this.ctx.fillStyle = '#fff';
         this.ctx.font = '30px Orbitron';
         this.ctx.textAlign = 'center';
-        this.ctx.fillText(`PLAYER ${ winner } WINS!`, 300, 200);
+        this.ctx.fillText(`PLAYER ${winner} WINS!`, 300, 200);
     }
 
     restart() {
@@ -770,7 +769,7 @@ class BreakoutGame {
         this.ctx.textAlign = 'center';
         this.ctx.fillText(won ? 'YOU WIN!' : 'GAME OVER', 300, 180);
         this.ctx.font = '20px Orbitron';
-        this.ctx.fillText(`Score: ${ this.score } `, 300, 220);
+        this.ctx.fillText(`Score: ${this.score} `, 300, 220);
 
         const highScore = window.highScores.getHighScore('breakout');
         if (this.score === highScore && this.score > 0) {
