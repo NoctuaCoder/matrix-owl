@@ -51,13 +51,13 @@ body {
     width: 100%;
     height: 100%;
     background: repeating-linear-gradient(0deg,
-            rgba(0, 0, 0, 0.15),
-            rgba(0, 0, 0, 0.15) 1px,
+            rgba(0, 0, 0, 0.3),
+            rgba(0, 0, 0, 0.3) 1px,
             transparent 1px,
             transparent 2px);
     pointer-events: none;
     z-index: 9998;
-    animation: scanlineMove 8s linear infinite;
+    animation: scanlineMove 6s linear infinite;
 }
 
 @keyframes scanlineMove {
@@ -81,14 +81,15 @@ body {
 
 /* Top Bar */
 .top-bar {
-    height: 40px;
+    height: 28px;
     background: var(--bg-panel);
-    border-bottom: 2px solid var(--text-primary);
+    border-bottom: 1px solid var(--accent-cyan);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 1rem;
-    box-shadow: 0 0 20px var(--border-glow);
+    padding: 0 0.5rem;
+    box-shadow: 0 0 15px var(--border-glow);
+    font-size: 0.7rem;
 }
 
 .top-bar-left,
@@ -96,65 +97,66 @@ body {
 .top-bar-right {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 
 .system-name {
     font-family: 'Orbitron', sans-serif;
     font-weight: 900;
-    font-size: 0.875rem;
-    letter-spacing: 0.2em;
-    text-shadow: 0 0 10px var(--text-primary);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-shadow: 0 0 10px var(--accent-cyan);
 }
 
 .user-name {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     color: var(--text-secondary);
 }
 
 .separator {
     color: var(--text-dim);
+    font-size: 0.7rem;
 }
 
 .time-display {
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.125rem;
+    font-size: 0.85rem;
     font-weight: 700;
     color: var(--accent-cyan);
-    text-shadow: 0 0 15px var(--accent-cyan);
+    text-shadow: 0 0 10px var(--accent-cyan);
 }
 
 .status-indicator {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     font-weight: 700;
 }
 
 .status-indicator.online {
     color: var(--text-primary);
-    text-shadow: 0 0 10px var(--text-primary);
+    text-shadow: 0 0 8px var(--text-primary);
 }
 
 /* Main Content */
 .main-content {
     flex: 1;
     display: grid;
-    grid-template-columns: 250px 1fr 250px;
-    gap: 2px;
-    background: var(--text-primary);
-    padding: 2px;
+    grid-template-columns: 200px 1fr 200px;
+    gap: 1px;
+    background: var(--accent-cyan);
+    padding: 1px;
 }
 
 /* Side Panels */
 .side-panel {
     background: var(--bg-panel);
-    border: 1px solid var(--text-primary);
-    padding: 1rem;
+    border: 1px solid var(--accent-cyan);
+    padding: 0.5rem;
     overflow-y: auto;
-    box-shadow: inset 0 0 30px rgba(0, 255, 0, 0.1);
+    box-shadow: inset 0 0 20px rgba(0, 217, 255, 0.1);
 }
 
 .side-panel::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
 }
 
 .side-panel::-webkit-scrollbar-track {
@@ -162,61 +164,63 @@ body {
 }
 
 .side-panel::-webkit-scrollbar-thumb {
-    background: var(--text-dim);
-    border-radius: 3px;
+    background: var(--accent-cyan);
+    border-radius: 2px;
 }
 
 .panel-header {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     font-weight: 700;
-    letter-spacing: 0.2em;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--text-dim);
-    text-shadow: 0 0 10px var(--text-primary);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--accent-cyan);
+    text-shadow: 0 0 8px var(--accent-cyan);
 }
 
 /* Monitor Sections */
 .monitor-section {
-    margin-bottom: 1.5rem;
-    padding: 0.75rem;
-    background: rgba(0, 255, 0, 0.02);
-    border: 1px solid var(--text-dim);
-    border-radius: 4px;
+    margin-bottom: 0.75rem;
+    padding: 0.4rem;
+    background: rgba(0, 217, 255, 0.03);
+    border: 1px solid rgba(0, 217, 255, 0.3);
+    border-radius: 2px;
 }
 
 .monitor-title {
-    font-size: 0.625rem;
+    font-size: 0.55rem;
     letter-spacing: 0.1em;
-    color: var(--text-dim);
-    margin-bottom: 0.5rem;
+    color: var(--accent-cyan);
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
 }
 
 .monitor-value {
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.25rem;
+    font-size: 0.9rem;
     font-weight: 700;
-    margin-bottom: 0.75rem;
-    text-shadow: 0 0 10px var(--text-primary);
+    margin-bottom: 0.4rem;
+    text-shadow: 0 0 8px var(--accent-cyan);
+    color: var(--accent-cyan);
 }
 
 .monitor-value.large {
-    font-size: 2.5rem;
+    font-size: 1.5rem;
 }
 
 .monitor-graph {
     width: 100%;
-    height: 60px;
-    border: 1px solid var(--text-dim);
+    height: 40px;
+    border: 1px solid var(--accent-cyan);
     background: rgba(0, 0, 0, 0.5);
 }
 
 .stat-item {
     display: flex;
     justify-content: space-between;
-    font-size: 0.75rem;
-    margin-bottom: 0.5rem;
+    font-size: 0.65rem;
+    margin-bottom: 0.3rem;
 }
 
 .stat-label {
@@ -224,29 +228,30 @@ body {
 }
 
 .stat-value {
-    color: var(--text-primary);
+    color: var(--accent-cyan);
     font-weight: 700;
+    text-shadow: 0 0 5px var(--accent-cyan);
 }
 
 /* Center Terminal */
 .center-terminal {
     background: var(--bg-panel);
-    border: 1px solid var(--text-primary);
+    border: 1px solid var(--accent-cyan);
     display: flex;
     flex-direction: column;
-    box-shadow: inset 0 0 50px rgba(0, 255, 0, 0.05);
+    box-shadow: inset 0 0 30px rgba(0, 217, 255, 0.08);
 }
 
 .terminal-output {
     flex: 1;
-    padding: 2rem;
+    padding: 0.75rem;
     overflow-y: auto;
-    font-size: 0.9375rem;
-    line-height: 1.6;
+    font-size: 0.8rem;
+    line-height: 1.5;
 }
 
 .terminal-output::-webkit-scrollbar {
-    width: 8px;
+    width: 4px;
 }
 
 .terminal-output::-webkit-scrollbar-track {
@@ -254,8 +259,8 @@ body {
 }
 
 .terminal-output::-webkit-scrollbar-thumb {
-    background: var(--text-dim);
-    border-radius: 4px;
+    background: var(--accent-cyan);
+    border-radius: 2px;
 }
 
 /* Welcome Screen */
@@ -293,18 +298,19 @@ body {
 
 /* Command Line */
 .command-line {
-    background: rgba(0, 0, 0, 0.5);
-    border-top: 1px solid var(--text-dim);
-    padding: 1rem 2rem;
+    background: rgba(0, 0, 0, 0.7);
+    border-top: 1px solid var(--accent-cyan);
+    padding: 0.4rem 0.75rem;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
 }
 
 .prompt {
-    color: var(--text-primary);
+    color: var(--accent-cyan);
     font-weight: 700;
-    text-shadow: 0 0 5px var(--text-primary);
+    text-shadow: 0 0 8px var(--accent-cyan);
+    font-size: 0.8rem;
 }
 
 .command-input {
@@ -314,13 +320,14 @@ body {
     outline: none;
     color: var(--text-primary);
     font-family: 'Share Tech Mono', monospace;
-    font-size: 1rem;
+    font-size: 0.8rem;
     caret-color: transparent;
 }
 
 .cursor-blink {
-    color: var(--text-primary);
-    animation: blink 1s infinite;
+    color: var(--accent-cyan);
+    animation: blink 0.8s infinite;
+    text-shadow: 0 0 8px var(--accent-cyan);
 }
 
 @keyframes blink {
@@ -338,25 +345,26 @@ body {
 
 /* Bottom Bar */
 .bottom-bar {
-    height: 30px;
+    height: 24px;
     background: var(--bg-panel);
-    border-top: 2px solid var(--text-primary);
+    border-top: 1px solid var(--accent-cyan);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 1rem;
-    font-size: 0.625rem;
-    box-shadow: 0 0 20px var(--border-glow);
+    padding: 0 0.5rem;
+    font-size: 0.6rem;
+    box-shadow: 0 0 15px var(--border-glow);
 }
 
 .bottom-bar-left,
 .bottom-bar-right {
     display: flex;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 
 .info-item {
     color: var(--text-secondary);
+    letter-spacing: 0.05em;
 }
 
 /* Gradient Cards (Premium Integration) */

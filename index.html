@@ -28,127 +28,209 @@
         <!-- Top Bar -->
         <div class="top-bar">
             <div class="top-bar-left">
-                <span class="system-name">NOCTUA TERMINAL</span>
+                <div class="system-name">NOCTUA<span style="color: var(--accent-cyan)">OS</span></div>
                 <span class="separator">|</span>
-                <span class="user-name">NOCTUACODER@TERMINAL</span>
+                <div class="user-name">HOST: <span style="color: var(--accent-cyan)">NOCTUA-X1</span></div>
+                <span class="separator">|</span>
+                <div class="user-name">IP: <span style="color: var(--accent-cyan)">192.168.1.42</span></div>
             </div>
             <div class="top-bar-center">
-                <span class="time-display" id="timeDisplay">00:00:00</span>
+                <div class="time-display" id="clock">00:00:00</div>
+                <div class="user-name" id="date">YYYY-MM-DD</div>
             </div>
             <div class="top-bar-right">
-                <span class="status-indicator online">● ONLINE</span>
+                <div class="status-indicator online">● ONLINE</div>
+                <span class="separator">|</span>
+                <div class="user-name">UPTIME: <span id="uptime" style="color: var(--accent-cyan)">00:00:00</span></div>
+                <span class="separator">|</span>
+                <div class="user-name">BAT: <span style="color: var(--accent-cyan)">100%</span></div>
             </div>
         </div>
 
-        <!-- Main Content Area -->
+        <!-- Main Content -->
         <div class="main-content">
 
-            <!-- Left Monitor Panel -->
+            <!-- Left Panel: File System -->
             <div class="side-panel left-panel">
-                <div class="panel-header">SYSTEM MONITOR</div>
+                <div class="panel-header">FILESYSTEM</div>
 
-                <!-- CPU Monitor -->
-                <div class="monitor-section">
-                    <div class="monitor-title">CPU USAGE</div>
-                    <div class="monitor-value" id="cpuValue">42%</div>
-                    <canvas id="cpuGraph" class="monitor-graph"></canvas>
-                </div>
+                <div class="monitor-section"
+                    style="height: calc(100% - 40px); overflow-y: auto; font-family: 'Share Tech Mono', monospace; font-size: 0.75rem;">
+                    <div style="color: var(--accent-cyan); margin-bottom: 0.5rem;">/home/noctua/projects</div>
 
-                <!-- RAM Monitor -->
-                <div class="monitor-section">
-                    <div class="monitor-title">MEMORY</div>
-                    <div class="monitor-value" id="ramValue">8.2GB</div>
-                    <canvas id="ramGraph" class="monitor-graph"></canvas>
-                </div>
+                    <!-- Simulated File Tree -->
+                    <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+                        <div style="cursor: pointer; color: var(--text-primary);">📁 <span
+                                style="color: var(--accent-cyan);">css</span></div>
+                        <div style="padding-left: 1rem; border-left: 1px solid var(--text-dim);">
+                            <div style="color: var(--text-secondary);">📄 edex.css</div>
+                            <div style="color: var(--text-secondary);">📄 animations.css</div>
+                        </div>
 
-                <!-- Network Monitor -->
-                <div class="monitor-section">
-                    <div class="monitor-title">NETWORK</div>
-                    <div class="monitor-value" id="netValue">↓ 1.2MB/s</div>
-                    <canvas id="netGraph" class="monitor-graph"></canvas>
+                        <div style="cursor: pointer; color: var(--text-primary); margin-top: 0.25rem;">📁 <span
+                                style="color: var(--accent-cyan);">js</span></div>
+                        <div style="padding-left: 1rem; border-left: 1px solid var(--text-dim);">
+                            <div style="color: var(--text-secondary);">📄 edex.js</div>
+                            <div style="color: var(--text-secondary);">📄 commands.js</div>
+                            <div style="color: var(--text-secondary);">📄 games.js</div>
+                            <div style="color: var(--text-secondary);">📄 effects.js</div>
+                        </div>
+
+                        <div style="cursor: pointer; color: var(--text-primary); margin-top: 0.25rem;">📁 <span
+                                style="color: var(--accent-cyan);">assets</span></div>
+                        <div style="padding-left: 1rem; border-left: 1px solid var(--text-dim);">
+                            <div style="color: var(--text-secondary);">📄 logo.svg</div>
+                            <div style="color: var(--text-secondary);">📄 background.jpg</div>
+                        </div>
+
+                        <div style="margin-top: 0.5rem;">
+                            <div style="color: var(--text-primary);">📄 index.html</div>
+                            <div style="color: var(--text-primary);">📄 README.md</div>
+                            <div style="color: var(--text-primary);">📄 package.json</div>
+                            <div style="color: var(--text-primary);">📄 .gitignore</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem; border-top: 1px solid var(--text-dim); padding-top: 1rem;">
+                        <div style="color: var(--text-dim); font-size: 0.65rem;">DISK USAGE</div>
+                        <div
+                            style="background: rgba(0,0,0,0.5); height: 6px; border-radius: 3px; margin-top: 0.25rem; overflow: hidden;">
+                            <div style="width: 42%; height: 100%; background: var(--accent-cyan);"></div>
+                        </div>
+                        <div
+                            style="display: flex; justify-content: space-between; font-size: 0.65rem; margin-top: 0.25rem;">
+                            <span>USED: 245GB</span>
+                            <span>FREE: 755GB</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Center Terminal Area -->
+            <!-- Center Terminal -->
             <div class="center-terminal">
-                <!-- Terminal Output -->
-                <div class="terminal-output" id="terminalOutput">
-                    <!-- Welcome -->
-                    <div class="terminal-welcome">
-                        <pre class="ascii-art">
- _   _  ___   ____ _____ _   _   _    
-| \ | |/ _ \ / ___|_   _| | | | / \   
-|  \| | | | | |     | | | | | |/ _ \  
-| |\  | |_| | |___  | | | |_| / ___ \ 
-|_| \_|\___/ \____| |_|  \___/_/   \_\
-                                       
-████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     
-╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     
-   ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║     
-   ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║     
-   ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗
-   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝
-                        </pre>
-                        <p class="welcome-text">Sci-Fi Hybrid Terminal v2.0</p>
-                        <p class="welcome-subtitle">Type <span class="highlight">help</span> to begin</p>
-                    </div>
+                <div class="terminal-welcome">
+                    <pre class="ascii-art">
+   _   _  ____   _____ _______ _    _         
+  | \ | |/ __ \ / ____|__   __| |  | |  /\    
+  |  \| | |  | | |       | |  | |  | | /  \   
+  | . ` | |  | | |       | |  | |  | |/ /\ \  
+  | |\  | |__| | |____   | |  | |__| / ____ \ 
+  |_| \_|\____/ \_____|  |_|   \____/_/    \_\
+                    </pre>
+                    <div class="welcome-text">NOCTUA TERMINAL <span
+                            style="font-size: 0.8rem; color: var(--text-secondary);">v2.0.4</span></div>
+                    <div class="welcome-subtitle">INITIALIZING SYSTEM... <span class="highlight">DONE</span></div>
                 </div>
-
-                <!-- Command Input -->
+                <div class="terminal-output" id="terminalOutput">
+                    <!-- Output will appear here -->
+                </div>
                 <div class="command-line">
-                    <span class="prompt">root@noctua:~#</span>
+                    <span class="prompt">noctua@x1:~/projects$</span>
                     <input type="text" id="commandInput" class="command-input" autocomplete="off" spellcheck="false"
                         autofocus>
-                    <span class="cursor-blink">_</span>
+                    <span class="cursor-blink">█</span>
                 </div>
             </div>
 
-            <!-- Right Monitor Panel -->
+            <!-- Right Panel: System Monitors -->
             <div class="side-panel right-panel">
-                <div class="panel-header">TELEMETRY</div>
+                <div class="panel-header">SYSTEM STATUS</div>
 
-                <!-- Commands Counter -->
+                <!-- CPU -->
                 <div class="monitor-section">
-                    <div class="monitor-title">COMMANDS</div>
-                    <div class="monitor-value large" id="commandCount">000</div>
-                </div>
-
-                <!-- Uptime -->
-                <div class="monitor-section">
-                    <div class="monitor-title">UPTIME</div>
-                    <div class="monitor-value" id="uptimeValue">00:00:00</div>
-                </div>
-
-                <!-- GitHub Stats -->
-                <div class="monitor-section">
-                    <div class="monitor-title">GITHUB</div>
+                    <div class="monitor-title">CPU USAGE</div>
+                    <div class="monitor-value large" id="cpuValue">12%</div>
+                    <canvas id="cpuGraph" class="monitor-graph"></canvas>
                     <div class="stat-item">
-                        <span class="stat-label">Repos:</span>
-                        <span class="stat-value">42</span>
+                        <span class="stat-label">TEMP</span>
+                        <span class="stat-value">45°C</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">Stars:</span>
-                        <span class="stat-value">156</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-label">Commits:</span>
-                        <span class="stat-value">1.2K</span>
+                        <span class="stat-label">CORES</span>
+                        <span class="stat-value">8 ACTIVE</span>
                     </div>
                 </div>
+
+                <!-- Memory -->
+                <div class="monitor-section">
+                    <div class="monitor-title">MEMORY</div>
+                    <div class="monitor-value" id="memoryValue">4.2 GB</div>
+                    <div
+                        style="background: rgba(0,0,0,0.5); height: 4px; border-radius: 2px; margin-bottom: 0.5rem; overflow: hidden;">
+                        <div id="memoryBar" style="width: 35%; height: 100%; background: var(--accent-purple);"></div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">TOTAL</span>
+                        <span class="stat-value">16.0 GB</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">SWAP</span>
+                        <span class="stat-value">0%</span>
+                    </div>
+                </div>
+
+                <!-- Network -->
+                <div class="monitor-section">
+                    <div class="monitor-title">NETWORK</div>
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 0.5rem;">
+                        <div>
+                            <div style="font-size: 0.65rem; color: var(--text-dim);">DOWN</div>
+                            <div style="color: var(--accent-green); font-weight: 700;">12.5 MB/s</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.65rem; color: var(--text-dim); text-align: right;">UP</div>
+                            <div style="color: var(--accent-orange); font-weight: 700;">2.1 MB/s</div>
+                        </div>
+                    </div>
+                    <canvas id="networkGraph" class="monitor-graph"></canvas>
+                </div>
+
+                <!-- Top Processes -->
+                <div class="monitor-section">
+                    <div class="monitor-title">TOP PROCESSES</div>
+                    <div style="font-size: 0.65rem; font-family: monospace;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                            <span>node</span>
+                            <span style="color: var(--accent-cyan);">12.5%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                            <span>chrome</span>
+                            <span style="color: var(--accent-cyan);">8.2%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                            <span>docker</span>
+                            <span style="color: var(--accent-cyan);">4.1%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.25rem;">
+                            <span>code</span>
+                            <span style="color: var(--accent-cyan);">2.8%</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>bash</span>
+                            <span style="color: var(--accent-cyan);">0.5%</span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
         <!-- Bottom Bar -->
         <div class="bottom-bar">
             <div class="bottom-bar-left">
-                <span class="info-item">KERNEL: Linux 6.1.0</span>
+                <span class="info-item">READY</span>
                 <span class="separator">|</span>
                 <span class="info-item">SHELL: Bash 5.2</span>
+                <span class="separator">|</span>
+                <span class="info-item">UTF-8</span>
             </div>
             <div class="bottom-bar-right">
-                <span class="info-item">THEME: Premium</span>
+                <span class="info-item">THEME: NOCTUA</span>
                 <span class="separator">|</span>
                 <span class="info-item" id="fps">FPS: 60</span>
+                <span class="separator">|</span>
+                <span class="info-item">KEYBOARD: EN-US</span>
             </div>
         </div>
 
