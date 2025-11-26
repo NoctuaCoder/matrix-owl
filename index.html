@@ -4,63 +4,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NoctuaCoder - Developer Terminal</title>
+    <title>Noctua Terminal - NoctuaCoder</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;500;600;700;900&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
 
     <!-- Styles -->
-    <link rel="stylesheet" href="css/premium.css">
+    <link rel="stylesheet" href="css/edex.css">
 </head>
 
 <body>
+    <!-- CRT Effect Overlay -->
+    <div class="crt-overlay"></div>
+    <div class="scanlines"></div>
+
     <!-- Main Container -->
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <h1 class="logo">NoctuaCoder</h1>
-                <div class="header-actions">
-                    <button class="icon-btn" id="themeBtn" title="Theme">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <circle cx="12" cy="12" r="5"></circle>
-                            <line x1="12" y1="1" x2="12" y2="3"></line>
-                            <line x1="12" y1="21" x2="12" y2="23"></line>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        </header>
+    <div class="edex-container">
 
-        <!-- Output Area -->
-        <main class="output-area" id="outputArea">
-            <!-- Welcome -->
-            <div class="welcome-section">
-                <h2 class="welcome-title">How We Keep You Ahead</h2>
-                <p class="welcome-subtitle">From quick daily updates to deep expert insights, we give you every
-                    advantage in the AI revolution.</p>
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="top-bar-left">
+                <span class="system-name">NOCTUA TERMINAL</span>
+                <span class="separator">|</span>
+                <span class="user-name">NOCTUACODER@TERMINAL</span>
             </div>
-        </main>
-
-        <!-- Input -->
-        <div class="input-section">
-            <div class="input-wrapper">
-                <span class="prompt">$</span>
-                <input type="text" id="commandInput" class="command-input" placeholder="Type a command..."
-                    autocomplete="off" spellcheck="false" autofocus>
+            <div class="top-bar-center">
+                <span class="time-display" id="timeDisplay">00:00:00</span>
+            </div>
+            <div class="top-bar-right">
+                <span class="status-indicator online">● ONLINE</span>
             </div>
         </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+
+            <!-- Left Monitor Panel -->
+            <div class="side-panel left-panel">
+                <div class="panel-header">SYSTEM MONITOR</div>
+
+                <!-- CPU Monitor -->
+                <div class="monitor-section">
+                    <div class="monitor-title">CPU USAGE</div>
+                    <div class="monitor-value" id="cpuValue">42%</div>
+                    <canvas id="cpuGraph" class="monitor-graph"></canvas>
+                </div>
+
+                <!-- RAM Monitor -->
+                <div class="monitor-section">
+                    <div class="monitor-title">MEMORY</div>
+                    <div class="monitor-value" id="ramValue">8.2GB</div>
+                    <canvas id="ramGraph" class="monitor-graph"></canvas>
+                </div>
+
+                <!-- Network Monitor -->
+                <div class="monitor-section">
+                    <div class="monitor-title">NETWORK</div>
+                    <div class="monitor-value" id="netValue">↓ 1.2MB/s</div>
+                    <canvas id="netGraph" class="monitor-graph"></canvas>
+                </div>
+            </div>
+
+            <!-- Center Terminal Area -->
+            <div class="center-terminal">
+                <!-- Terminal Output -->
+                <div class="terminal-output" id="terminalOutput">
+                    <!-- Welcome -->
+                    <div class="terminal-welcome">
+                        <pre class="ascii-art">
+ _   _  ___   ____ _____ _   _   _    
+| \ | |/ _ \ / ___|_   _| | | | / \   
+|  \| | | | | |     | | | | | |/ _ \  
+| |\  | |_| | |___  | | | |_| / ___ \ 
+|_| \_|\___/ \____| |_|  \___/_/   \_\
+                                       
+████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗     
+╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║     
+   ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║     
+   ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║     
+   ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗
+   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝
+                        </pre>
+                        <p class="welcome-text">Sci-Fi Hybrid Terminal v2.0</p>
+                        <p class="welcome-subtitle">Type <span class="highlight">help</span> to begin</p>
+                    </div>
+                </div>
+
+                <!-- Command Input -->
+                <div class="command-line">
+                    <span class="prompt">root@noctua:~#</span>
+                    <input type="text" id="commandInput" class="command-input" autocomplete="off" spellcheck="false"
+                        autofocus>
+                    <span class="cursor-blink">_</span>
+                </div>
+            </div>
+
+            <!-- Right Monitor Panel -->
+            <div class="side-panel right-panel">
+                <div class="panel-header">TELEMETRY</div>
+
+                <!-- Commands Counter -->
+                <div class="monitor-section">
+                    <div class="monitor-title">COMMANDS</div>
+                    <div class="monitor-value large" id="commandCount">000</div>
+                </div>
+
+                <!-- Uptime -->
+                <div class="monitor-section">
+                    <div class="monitor-title">UPTIME</div>
+                    <div class="monitor-value" id="uptimeValue">00:00:00</div>
+                </div>
+
+                <!-- GitHub Stats -->
+                <div class="monitor-section">
+                    <div class="monitor-title">GITHUB</div>
+                    <div class="stat-item">
+                        <span class="stat-label">Repos:</span>
+                        <span class="stat-value">42</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Stars:</span>
+                        <span class="stat-value">156</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Commits:</span>
+                        <span class="stat-value">1.2K</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="bottom-bar">
+            <div class="bottom-bar-left">
+                <span class="info-item">KERNEL: Linux 6.1.0</span>
+                <span class="separator">|</span>
+                <span class="info-item">SHELL: Bash 5.2</span>
+            </div>
+            <div class="bottom-bar-right">
+                <span class="info-item">THEME: Premium</span>
+                <span class="separator">|</span>
+                <span class="info-item" id="fps">FPS: 60</span>
+            </div>
+        </div>
+
     </div>
 
     <!-- Scripts -->
     <script src="js/config.js"></script>
-    <script src="js/premium.js"></script>
-    <script src="js/commands-premium.js"></script>
+    <script src="js/edex-monitors.js"></script>
+    <script src="js/edex-commands.js"></script>
+    <script src="js/edex.js"></script>
 </body>
 
 </html>
