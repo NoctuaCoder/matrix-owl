@@ -1,4 +1,3 @@
-```javascript
 // eDEX-UI Premium - Commands with Gradient Cards
 
 const edexCommands = {
@@ -286,21 +285,21 @@ const edexCommands = {
                     </div>`;
 
                 if (topScores.length > 0) {
-                        topScores.forEach((score, i) => {
-                            html += `
+                    topScores.forEach((score, i) => {
+                        html += `
     <div style="display: flex; justify-content: space-between; font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.25rem;">
         <span>${i + 1}. ${score.name}</span>
         <span>${score.score}</span>
     </div>`;
-                        });
+                    });
                 } else {
-                        html += `<div style="font-size: 0.875rem; color: var(--text-dim); text-align: center;">No scores yet</div>`;
+                    html += `<div style="font-size: 0.875rem; color: var(--text-dim); text-align: center;">No scores yet</div>`;
                 }
 
-                    html += `</div>`;
+                html += `</div>`;
             });
 
-                html += `</div></div></div > `;
+            html += `</div></div></div > `;
             return html;
         }
     },
