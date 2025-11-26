@@ -3,39 +3,52 @@
 const edexCommands = {
     help: {
         execute: () => `
-<div class="gradient-card orange fade-in">
-    <div class="card-content">
-        <div class="card-icon">📚</div>
-        <h3 class="card-title">PROJECTS</h3>
-        <p class="card-description">View portfolio of applications and creative coding projects</p>
-        <span class="card-action">→ Type: projects</span>
-    </div>
-</div>
-
 <div class="gradient-card blue fade-in">
     <div class="card-content">
-        <div class="card-icon">⚡</div>
-        <h3 class="card-title">SKILLS</h3>
-        <p class="card-description">Technical abilities and proficiency levels</p>
-        <span class="card-action">→ Type: skills</span>
-    </div>
-</div>
-
-<div class="gradient-card green fade-in">
-    <div class="card-content">
-        <div class="card-icon">📊</div>
-        <h3 class="card-title">STATS</h3>
-        <p class="card-description">GitHub statistics and activity metrics</p>
-        <span class="card-action">→ Type: stats</span>
+        <h3 class="card-title">NOCTUA ARCADE</h3>
+        <p class="card-description">Professional gaming terminal with classic arcade games</p>
+        <div style="margin-top: 1.5rem; display: grid; gap: 0.75rem;">
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: rgba(0,0,0,0.3); border-radius: 4px;">
+                <span style="font-weight: 600;">snake</span>
+                <span style="color: var(--text-secondary);">Classic Snake with tunnel wrapping</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: rgba(0,0,0,0.3); border-radius: 4px;">
+                <span style="font-weight: 600;">tetris</span>
+                <span style="color: var(--text-secondary);">Block stacking puzzle game</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: rgba(0,0,0,0.3); border-radius: 4px;">
+                <span style="font-weight: 600;">pong</span>
+                <span style="color: var(--text-secondary);">Classic paddle ball game</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: rgba(0,0,0,0.3); border-radius: 4px;">
+                <span style="font-weight: 600;">breakout</span>
+                <span style="color: var(--text-secondary);">Brick breaking arcade game</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: rgba(0,0,0,0.3); border-radius: 4px;">
+                <span style="font-weight: 600;">racer</span>
+                <span style="color: var(--text-secondary);">Retro racing game with pseudo-3D road</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: rgba(0,0,0,0.3); border-radius: 4px;">
+                <span style="font-weight: 600;">guess</span>
+                <span style="color: var(--text-secondary);">Number guessing game</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: rgba(0,0,0,0.3); border-radius: 4px;">
+                <span style="font-weight: 600;">scores</span>
+                <span style="color: var(--text-secondary);">View high scores</span>
+            </div>
+        </div>
     </div>
 </div>
 
 <div class="gradient-card purple fade-in">
     <div class="card-content">
-        <div class="card-icon">🎮</div>
-        <h3 class="card-title">GAMES</h3>
-        <p class="card-description">Play terminal games: snake, tetris, guess</p>
-        <span class="card-action">→ Type game name</span>
+        <h3 class="card-title">PORTFOLIO</h3>
+        <p class="card-description">View developer information and projects</p>
+        <div style="margin-top: 1rem; display: flex; gap: 1rem;">
+            <span class="card-action">projects</span>
+            <span class="card-action">skills</span>
+            <span class="card-action">stats</span>
+        </div>
     </div>
 </div>`
     },
@@ -145,6 +158,73 @@ const edexCommands = {
             game.start();
             window.currentGame = game;
             return '';
+        }
+    },
+
+    racer: {
+        execute: () => {
+            const game = new window.RacerGame(document.getElementById('terminalOutput'));
+            game.start();
+            window.currentGame = game;
+            return '';
+        }
+    },
+
+    pong: {
+        execute: () => {
+            const game = new window.PongGame(document.getElementById('terminalOutput'));
+            game.start();
+            window.currentGame = game;
+            return '';
+        }
+    },
+
+    breakout: {
+        execute: () => {
+            const game = new window.BreakoutGame(document.getElementById('terminalOutput'));
+            game.start();
+            window.currentGame = game;
+            return '';
+        }
+    },
+
+    scores: {
+        execute: () => {
+            const games = ['snake', 'tetris', 'breakout', 'pong', 'guess', 'racer'];
+            let html = `
+<div class="gradient-card green fade-in">
+    <div class="card-content">
+        <h3 class="card-title">HIGH SCORES</h3>
+        <p class="card-description">Top scores across all games</p>
+        <div style="margin-top: 1.5rem; display: grid; gap: 1rem;">`;
+
+            games.forEach(game => {
+                const topScores = window.highScores.getTopScores(game, 3);
+                const highScore = window.highScores.getHighScore(game);
+                html += `
+<div style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 4px;">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+        <span style="font-weight: 700; text-transform: uppercase;">${game}</span>
+        <span style="color: var(--accent-cyan);">Best: ${highScore}</span>
+    </div>`;
+
+                if (topScores.length > 0) {
+                    topScores.forEach((score, i) => {
+                        html += `
+    <div style="display: flex; justify-content: space-between; font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.25rem;">
+        <span>${i + 1}. ${score.name}</span>
+        <span>${score.score}</span>
+    </div>`;
+                    });
+                } else {
+                    html += `<div style="font-size: 0.875rem; color: var(--text-dim); text-align: center;">No scores yet</div>`;
+                }
+
+                html += `</div>`;
+            });
+
+            html += `</div></div></div>`;
+            return html;
         }
     },
 

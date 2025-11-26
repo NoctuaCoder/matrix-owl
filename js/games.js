@@ -114,6 +114,12 @@ class SnakeGame {
 
     gameOver() {
         clearInterval(this.gameLoop);
+
+        // Save high score
+        if (this.score > 0) {
+            window.highScores.saveScore('snake', this.score);
+        }
+
         this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.fillStyle = '#fff';
@@ -122,6 +128,12 @@ class SnakeGame {
         this.ctx.fillText('GAME OVER', this.canvas.width / 2, this.canvas.height / 2);
         this.ctx.font = '20px Orbitron';
         this.ctx.fillText(`Score: ${this.score}`, this.canvas.width / 2, this.canvas.height / 2 + 40);
+
+        const highScore = window.highScores.getHighScore('snake');
+        if (this.score === highScore && this.score > 0) {
+            this.ctx.fillStyle = '#00d9ff';
+            this.ctx.fillText('NEW HIGH SCORE!', this.canvas.width / 2, this.canvas.height / 2 + 80);
+        }
     }
 
     restart() {
@@ -387,6 +399,563 @@ class GuessNumberGame {
     }
 }
 
+// Retro Racing Game
+class RacerGame {
+    constructor(container) {
+        this.container = container;
+        this.canvas = null;
+        this.ctx = null;
+        this.playerX = 0.5;
+        this.speed = 0;
+        this.distance = 0;
+        this.cars = [];
+        this.gameLoop = null;
+        this.keys = {};
+    }
+
+    start() {
+        const html = `
+<div class="game-container fade-in">
+    <div class="gradient-card orange">
+        <div class="card-content">
+            <h3 class="card-title">RETRO RACER</h3>
+            <p class="card-description">Use arrow keys: LEFT/RIGHT to steer, UP to accelerate, DOWN to brake</p>
+            <div style="margin: 1.5rem 0;">
+                <canvas id="racerCanvas" width="400" height="500" style="border: 2px solid var(--accent-orange); background: #87CEEB; display: block; margin: 0 auto;"></canvas>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="card-action">DISTANCE: <span id="racerScore">0</span>m</span>
+                <span class="card-action">SPEED: <span id="racerSpeed">0</span> km/h</span>
+                <button onclick="window.currentGame.restart()" style="padding: 0.5rem 1rem; background: var(--accent-orange); border: none; color: #000; font-weight: 700; cursor: pointer; border-radius: 4px;">RESTART</button>
+            </div>
+        </div>
+    </div>
+</div>`;
+        this.container.innerHTML += html;
+        this.canvas = document.getElementById('racerCanvas');
+        this.ctx = this.canvas.getContext('2d');
+
+        this.setupControls();
+        this.spawnCar();
+        this.gameLoop = setInterval(() => this.update(), 1000 / 60);
+    }
+
+    setupControls() {
+        document.addEventListener('keydown', (e) => {
+            this.keys[e.key] = true;
+        });
+        document.addEventListener('keyup', (e) => {
+            this.keys[e.key] = false;
+        });
+    }
+
+    spawnCar() {
+        if (Math.random() < 0.02 && this.cars.length < 5) {
+            this.cars.push({
+                x: Math.random(),
+                y: 0,
+                speed: 2 + Math.random() * 3
+            });
+        }
+    }
+
+    update() {
+        // Controls
+        if (this.keys['ArrowLeft']) this.playerX -= 0.02;
+        if (this.keys['ArrowRight']) this.playerX += 0.02;
+        if (this.keys['ArrowUp']) this.speed = Math.min(this.speed + 0.5, 200);
+        if (this.keys['ArrowDown']) this.speed = Math.max(this.speed - 1, 0);
+
+        // Friction
+        if (!this.keys['ArrowUp'] && !this.keys['ArrowDown']) {
+            this.speed *= 0.98;
+        }
+
+        // Keep player on road
+        this.playerX = Math.max(0.2, Math.min(0.8, this.playerX));
+
+        // Update distance
+        this.distance += this.speed / 100;
+        document.getElementById('racerScore').textContent = Math.floor(this.distance);
+        document.getElementById('racerSpeed').textContent = Math.floor(this.speed);
+
+        // Update cars
+        this.cars.forEach((car, i) => {
+            car.y += (this.speed + car.speed) / 20;
+            if (car.y > 1) {
+                this.cars.splice(i, 1);
+            }
+
+            // Collision detection
+            if (car.y > 0.85 && car.y < 0.95) {
+                if (Math.abs(car.x - this.playerX) < 0.08) {
+                    this.gameOver();
+                }
+            }
+        });
+
+        this.spawnCar();
+        this.draw();
+    }
+
+    draw() {
+        const w = this.canvas.width;
+        const h = this.canvas.height;
+
+        // Sky
+        this.ctx.fillStyle = '#87CEEB';
+        this.ctx.fillRect(0, 0, w, h / 2);
+
+        // Ground
+        this.ctx.fillStyle = '#228B22';
+        this.ctx.fillRect(0, h / 2, w, h / 2);
+
+        // Road stripes (perspective)
+        for (let i = 0; i < 20; i++) {
+            const y = (i / 20) * h;
+            const perspective = i / 20;
+            const roadWidth = 100 + perspective * 200;
+            const x = w / 2;
+
+            // Road
+            this.ctx.fillStyle = i % 2 === 0 ? '#555' : '#666';
+            this.ctx.fillRect(x - roadWidth / 2, y, roadWidth, h / 20);
+
+            // Center line
+            if (i % 2 === 0) {
+                this.ctx.fillStyle = '#fff';
+                this.ctx.fillRect(x - 3, y, 6, h / 40);
+            }
+        }
+
+        // Other cars
+        this.cars.forEach(car => {
+            const perspective = car.y;
+            const carWidth = 20 + perspective * 40;
+            const carHeight = 30 + perspective * 50;
+            const roadWidth = 100 + perspective * 200;
+            const x = w / 2 + (car.x - 0.5) * roadWidth;
+            const y = h / 2 + perspective * (h / 2);
+
+            this.ctx.fillStyle = '#e91e63';
+            this.ctx.fillRect(x - carWidth / 2, y - carHeight, carWidth, carHeight);
+            this.ctx.fillStyle = '#fff';
+            this.ctx.fillRect(x - carWidth / 2 + 5, y - carHeight + 5, 8, 8);
+            this.ctx.fillRect(x + carWidth / 2 - 13, y - carHeight + 5, 8, 8);
+        });
+
+        // Player car
+        const playerY = h * 0.9;
+        const playerWidth = 50;
+        const playerHeight = 70;
+        const roadWidth = 100 + 0.9 * 200;
+        const playerScreenX = w / 2 + (this.playerX - 0.5) * roadWidth;
+
+        this.ctx.fillStyle = '#00d9ff';
+        this.ctx.shadowBlur = 15;
+        this.ctx.shadowColor = '#00d9ff';
+        this.ctx.fillRect(playerScreenX - playerWidth / 2, playerY - playerHeight, playerWidth, playerHeight);
+        this.ctx.shadowBlur = 0;
+
+        // Headlights
+        this.ctx.fillStyle = '#ffff00';
+        this.ctx.fillRect(playerScreenX - playerWidth / 2 + 5, playerY - playerHeight + 5, 12, 12);
+        this.ctx.fillRect(playerScreenX + playerWidth / 2 - 17, playerY - playerHeight + 5, 12, 12);
+    }
+
+    gameOver() {
+        clearInterval(this.gameLoop);
+
+        // Save high score
+        if (this.distance > 0) {
+            window.highScores.saveScore('racer', Math.floor(this.distance));
+        }
+
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = '30px Orbitron';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText('CRASH!', this.canvas.width / 2, this.canvas.height / 2);
+        this.ctx.font = '20px Orbitron';
+        this.ctx.fillText(`Distance: ${Math.floor(this.distance)}m`, this.canvas.width / 2, this.canvas.height / 2 + 40);
+
+        const highScore = window.highScores.getHighScore('racer');
+        if (Math.floor(this.distance) === highScore && this.distance > 0) {
+            this.ctx.fillStyle = '#00d9ff';
+            this.ctx.fillText('NEW HIGH SCORE!', this.canvas.width / 2, this.canvas.height / 2 + 80);
+        }
+    }
+
+    restart() {
+        this.playerX = 0.5;
+        this.speed = 0;
+        this.distance = 0;
+        this.cars = [];
+        this.keys = {};
+        document.getElementById('racerScore').textContent = '0';
+        document.getElementById('racerSpeed').textContent = '0';
+        clearInterval(this.gameLoop);
+        this.gameLoop = setInterval(() => this.update(), 1000 / 60);
+    }
+}
+
+// Pong Game
+class PongGame {
+    constructor(container) {
+        this.container = container;
+        this.canvas = null;
+        this.ctx = null;
+        this.ballX = 200;
+        this.ballY = 200;
+        this.ballSpeedX = 5;
+        this.ballSpeedY = 5;
+        this.paddle1Y = 150;
+        this.paddle2Y = 150;
+        this.score1 = 0;
+        this.score2 = 0;
+        this.gameLoop = null;
+        this.keys = {};
+    }
+
+    start() {
+        const html = `
+<div class="game-container fade-in">
+    <div class="gradient-card blue">
+        <div class="card-content">
+            <h3 class="card-title">PONG</h3>
+            <p class="card-description">Classic paddle game. W/S for left paddle, Arrow UP/DOWN for right paddle</p>
+            <div style="margin: 1.5rem 0;">
+                <canvas id="pongCanvas" width="600" height="400" style="border: 2px solid var(--accent-blue); background: #000; display: block; margin: 0 auto;"></canvas>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="card-action">PLAYER 1: <span id="pongScore1">0</span></span>
+                <button onclick="window.currentGame.restart()" style="padding: 0.5rem 1rem; background: var(--accent-blue); border: none; color: #fff; font-weight: 700; cursor: pointer; border-radius: 4px;">RESTART</button>
+                <span class="card-action">PLAYER 2: <span id="pongScore2">0</span></span>
+            </div>
+        </div>
+    </div>
+</div>`;
+        this.container.innerHTML += html;
+        this.canvas = document.getElementById('pongCanvas');
+        this.ctx = this.canvas.getContext('2d');
+
+        this.setupControls();
+        this.gameLoop = setInterval(() => this.update(), 1000 / 60);
+    }
+
+    setupControls() {
+        document.addEventListener('keydown', (e) => {
+            this.keys[e.key] = true;
+        });
+        document.addEventListener('keyup', (e) => {
+            this.keys[e.key] = false;
+        });
+    }
+
+    update() {
+        // Paddle controls
+        if (this.keys['w'] || this.keys['W']) this.paddle1Y -= 6;
+        if (this.keys['s'] || this.keys['S']) this.paddle1Y += 6;
+        if (this.keys['ArrowUp']) this.paddle2Y -= 6;
+        if (this.keys['ArrowDown']) this.paddle2Y += 6;
+
+        // Keep paddles in bounds
+        this.paddle1Y = Math.max(0, Math.min(300, this.paddle1Y));
+        this.paddle2Y = Math.max(0, Math.min(300, this.paddle2Y));
+
+        // Ball movement
+        this.ballX += this.ballSpeedX;
+        this.ballY += this.ballSpeedY;
+
+        // Ball collision with top/bottom
+        if (this.ballY <= 10 || this.ballY >= 390) {
+            this.ballSpeedY = -this.ballSpeedY;
+        }
+
+        // Ball collision with paddles
+        if (this.ballX <= 30 && this.ballY >= this.paddle1Y && this.ballY <= this.paddle1Y + 100) {
+            this.ballSpeedX = Math.abs(this.ballSpeedX) + 0.5;
+            this.ballSpeedY += (this.ballY - (this.paddle1Y + 50)) * 0.1;
+        }
+        if (this.ballX >= 570 && this.ballY >= this.paddle2Y && this.ballY <= this.paddle2Y + 100) {
+            this.ballSpeedX = -Math.abs(this.ballSpeedX) - 0.5;
+            this.ballSpeedY += (this.ballY - (this.paddle2Y + 50)) * 0.1;
+        }
+
+        // Scoring
+        if (this.ballX < 0) {
+            this.score2++;
+            document.getElementById('pongScore2').textContent = this.score2;
+            this.resetBall();
+            if (this.score2 >= 5) this.gameOver(2);
+        }
+        if (this.ballX > 600) {
+            this.score1++;
+            document.getElementById('pongScore1').textContent = this.score1;
+            this.resetBall();
+            if (this.score1 >= 5) this.gameOver(1);
+        }
+
+        this.draw();
+    }
+
+    resetBall() {
+        this.ballX = 300;
+        this.ballY = 200;
+        this.ballSpeedX = (Math.random() > 0.5 ? 1 : -1) * 5;
+        this.ballSpeedY = (Math.random() - 0.5) * 4;
+    }
+
+    draw() {
+        this.ctx.fillStyle = '#000';
+        this.ctx.fillRect(0, 0, 600, 400);
+
+        // Center line
+        this.ctx.strokeStyle = '#333';
+        this.ctx.setLineDash([10, 10]);
+        this.ctx.beginPath();
+        this.ctx.moveTo(300, 0);
+        this.ctx.lineTo(300, 400);
+        this.ctx.stroke();
+        this.ctx.setLineDash([]);
+
+        // Paddles
+        this.ctx.fillStyle = '#00d9ff';
+        this.ctx.shadowBlur = 10;
+        this.ctx.shadowColor = '#00d9ff';
+        this.ctx.fillRect(10, this.paddle1Y, 10, 100);
+        this.ctx.fillRect(580, this.paddle2Y, 10, 100);
+
+        // Ball
+        this.ctx.fillStyle = '#fff';
+        this.ctx.shadowColor = '#fff';
+        this.ctx.beginPath();
+        this.ctx.arc(this.ballX, this.ballY, 10, 0, Math.PI * 2);
+        this.ctx.fill();
+        this.ctx.shadowBlur = 0;
+    }
+
+    gameOver(winner) {
+        clearInterval(this.gameLoop);
+
+        const totalScore = this.score1 + this.score2;
+        if (totalScore > 0) {
+            window.highScores.saveScore('pong', totalScore);
+        }
+
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+        this.ctx.fillRect(0, 0, 600, 400);
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = '30px Orbitron';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText(`PLAYER ${winner} WINS!`, 300, 200);
+    }
+
+    restart() {
+        this.ballX = 300;
+        this.ballY = 200;
+        this.ballSpeedX = 5;
+        this.ballSpeedY = 5;
+        this.paddle1Y = 150;
+        this.paddle2Y = 150;
+        this.score1 = 0;
+        this.score2 = 0;
+        document.getElementById('pongScore1').textContent = '0';
+        document.getElementById('pongScore2').textContent = '0';
+        clearInterval(this.gameLoop);
+        this.gameLoop = setInterval(() => this.update(), 1000 / 60);
+    }
+}
+
+// Breakout Game
+class BreakoutGame {
+    constructor(container) {
+        this.container = container;
+        this.canvas = null;
+        this.ctx = null;
+        this.paddleX = 250;
+        this.ballX = 300;
+        this.ballY = 350;
+        this.ballSpeedX = 4;
+        this.ballSpeedY = -4;
+        this.score = 0;
+        this.bricks = [];
+        this.gameLoop = null;
+        this.keys = {};
+    }
+
+    start() {
+        const html = `
+<div class="game-container fade-in">
+    <div class="gradient-card green">
+        <div class="card-content">
+            <h3 class="card-title">BREAKOUT</h3>
+            <p class="card-description">Break all bricks. Use arrow LEFT/RIGHT or A/D to move paddle</p>
+            <div style="margin: 1.5rem 0;">
+                <canvas id="breakoutCanvas" width="600" height="400" style="border: 2px solid var(--accent-green); background: #000; display: block; margin: 0 auto;"></canvas>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span class="card-action">SCORE: <span id="breakoutScore">0</span></span>
+                <button onclick="window.currentGame.restart()" style="padding: 0.5rem 1rem; background: var(--accent-green); border: none; color: #000; font-weight: 700; cursor: pointer; border-radius: 4px;">RESTART</button>
+            </div>
+        </div>
+    </div>
+</div>`;
+        this.container.innerHTML += html;
+        this.canvas = document.getElementById('breakoutCanvas');
+        this.ctx = this.canvas.getContext('2d');
+
+        this.createBricks();
+        this.setupControls();
+        this.gameLoop = setInterval(() => this.update(), 1000 / 60);
+    }
+
+    createBricks() {
+        const colors = ['#ff6b35', '#4a90e2', '#2ecc71', '#9b59b6', '#e91e63'];
+        for (let row = 0; row < 5; row++) {
+            for (let col = 0; col < 10; col++) {
+                this.bricks.push({
+                    x: col * 60 + 5,
+                    y: row * 20 + 30,
+                    width: 55,
+                    height: 15,
+                    color: colors[row],
+                    alive: true
+                });
+            }
+        }
+    }
+
+    setupControls() {
+        document.addEventListener('keydown', (e) => {
+            this.keys[e.key] = true;
+        });
+        document.addEventListener('keyup', (e) => {
+            this.keys[e.key] = false;
+        });
+    }
+
+    update() {
+        // Paddle controls
+        if (this.keys['ArrowLeft'] || this.keys['a'] || this.keys['A']) this.paddleX -= 8;
+        if (this.keys['ArrowRight'] || this.keys['d'] || this.keys['D']) this.paddleX += 8;
+
+        // Keep paddle in bounds
+        this.paddleX = Math.max(0, Math.min(500, this.paddleX));
+
+        // Ball movement
+        this.ballX += this.ballSpeedX;
+        this.ballY += this.ballSpeedY;
+
+        // Ball collision with walls
+        if (this.ballX <= 10 || this.ballX >= 590) {
+            this.ballSpeedX = -this.ballSpeedX;
+        }
+        if (this.ballY <= 10) {
+            this.ballSpeedY = -this.ballSpeedY;
+        }
+
+        // Ball collision with paddle
+        if (this.ballY >= 370 && this.ballY <= 380 &&
+            this.ballX >= this.paddleX && this.ballX <= this.paddleX + 100) {
+            this.ballSpeedY = -Math.abs(this.ballSpeedY);
+            this.ballSpeedX += (this.ballX - (this.paddleX + 50)) * 0.1;
+        }
+
+        // Ball collision with bricks
+        this.bricks.forEach(brick => {
+            if (brick.alive &&
+                this.ballX >= brick.x && this.ballX <= brick.x + brick.width &&
+                this.ballY >= brick.y && this.ballY <= brick.y + brick.height) {
+                brick.alive = false;
+                this.ballSpeedY = -this.ballSpeedY;
+                this.score += 10;
+                document.getElementById('breakoutScore').textContent = this.score;
+            }
+        });
+
+        // Check win
+        if (this.bricks.every(b => !b.alive)) {
+            this.gameOver(true);
+        }
+
+        // Check loss
+        if (this.ballY > 400) {
+            this.gameOver(false);
+        }
+
+        this.draw();
+    }
+
+    draw() {
+        this.ctx.fillStyle = '#000';
+        this.ctx.fillRect(0, 0, 600, 400);
+
+        // Bricks
+        this.bricks.forEach(brick => {
+            if (brick.alive) {
+                this.ctx.fillStyle = brick.color;
+                this.ctx.fillRect(brick.x, brick.y, brick.width, brick.height);
+            }
+        });
+
+        // Paddle
+        this.ctx.fillStyle = '#00d9ff';
+        this.ctx.shadowBlur = 10;
+        this.ctx.shadowColor = '#00d9ff';
+        this.ctx.fillRect(this.paddleX, 370, 100, 10);
+
+        // Ball
+        this.ctx.fillStyle = '#fff';
+        this.ctx.shadowColor = '#fff';
+        this.ctx.beginPath();
+        this.ctx.arc(this.ballX, this.ballY, 10, 0, Math.PI * 2);
+        this.ctx.fill();
+        this.ctx.shadowBlur = 0;
+    }
+
+    gameOver(won) {
+        clearInterval(this.gameLoop);
+
+        if (this.score > 0) {
+            window.highScores.saveScore('breakout', this.score);
+        }
+
+        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+        this.ctx.fillRect(0, 0, 600, 400);
+        this.ctx.fillStyle = '#fff';
+        this.ctx.font = '30px Orbitron';
+        this.ctx.textAlign = 'center';
+        this.ctx.fillText(won ? 'YOU WIN!' : 'GAME OVER', 300, 180);
+        this.ctx.font = '20px Orbitron';
+        this.ctx.fillText(`Score: ${this.score}`, 300, 220);
+
+        const highScore = window.highScores.getHighScore('breakout');
+        if (this.score === highScore && this.score > 0) {
+            this.ctx.fillStyle = '#00d9ff';
+            this.ctx.fillText('NEW HIGH SCORE!', 300, 260);
+        }
+    }
+
+    restart() {
+        this.paddleX = 250;
+        this.ballX = 300;
+        this.ballY = 350;
+        this.ballSpeedX = 4;
+        this.ballSpeedY = -4;
+        this.score = 0;
+        this.bricks = [];
+        document.getElementById('breakoutScore').textContent = '0';
+        this.createBricks();
+        clearInterval(this.gameLoop);
+        this.gameLoop = setInterval(() => this.update(), 1000 / 60);
+    }
+}
+
 window.SnakeGame = SnakeGame;
 window.TetrisGame = TetrisGame;
 window.GuessNumberGame = GuessNumberGame;
+window.RacerGame = RacerGame;
+window.PongGame = PongGame;
+window.BreakoutGame = BreakoutGame;
