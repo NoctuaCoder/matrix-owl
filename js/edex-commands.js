@@ -28,6 +28,15 @@ const edexCommands = {
         <p class="card-description">GitHub statistics and activity metrics</p>
         <span class="card-action">→ Type: stats</span>
     </div>
+</div>
+
+<div class="gradient-card purple fade-in">
+    <div class="card-content">
+        <div class="card-icon">🎮</div>
+        <h3 class="card-title">GAMES</h3>
+        <p class="card-description">Play terminal games: snake, tetris, guess</p>
+        <span class="card-action">→ Type game name</span>
+    </div>
 </div>`
     },
 
@@ -110,6 +119,33 @@ const edexCommands = {
         <span class="card-action">→ 2024</span>
     </div>
 </div>`
+    },
+
+    snake: {
+        execute: () => {
+            const game = new window.SnakeGame(document.getElementById('terminalOutput'));
+            game.start();
+            window.currentGame = game;
+            return '';
+        }
+    },
+
+    tetris: {
+        execute: () => {
+            const game = new window.TetrisGame(document.getElementById('terminalOutput'));
+            game.start();
+            window.currentGame = game;
+            return '';
+        }
+    },
+
+    guess: {
+        execute: () => {
+            const game = new window.GuessNumberGame(document.getElementById('terminalOutput'));
+            game.start();
+            window.currentGame = game;
+            return '';
+        }
     },
 
     clear: {
