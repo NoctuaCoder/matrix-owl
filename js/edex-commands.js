@@ -25,10 +25,6 @@ const edexCommands = {
                 <span style="color: var(--text-secondary);">Brick breaking arcade game</span>
             </div>
             <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: rgba(0,0,0,0.3); border-radius: 4px;">
-                <span style="font-weight: 600;">racer</span>
-                <span style="color: var(--text-secondary);">Retro racing game with pseudo-3D road</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: rgba(0,0,0,0.3); border-radius: 4px;">
                 <span style="font-weight: 600;">guess</span>
                 <span style="color: var(--text-secondary);">Number guessing game</span>
             </div>
@@ -161,15 +157,6 @@ const edexCommands = {
         }
     },
 
-    racer: {
-        execute: () => {
-            const game = new window.RacerGame(document.getElementById('terminalOutput'));
-            game.start();
-            window.currentGame = game;
-            return '';
-        }
-    },
-
     pong: {
         execute: () => {
             const game = new window.PongGame(document.getElementById('terminalOutput'));
@@ -190,7 +177,7 @@ const edexCommands = {
 
     scores: {
         execute: () => {
-            const games = ['snake', 'tetris', 'breakout', 'pong', 'guess', 'racer'];
+            const games = ['snake', 'tetris', 'breakout', 'pong', 'guess'];
             let html = `
 <div class="gradient-card green fade-in">
     <div class="card-content">

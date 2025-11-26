@@ -418,231 +418,12 @@ class GuessNumberGame {
         document.getElementById('guessResult').innerHTML = '';
         const input = document.getElementById('guessInput');
         input.disabled = false;
+        ```
         input.value = '';
         input.focus();
     }
 }
 
-// Simple Top-Down Racing Game
-class RacerGame {
-    constructor(container) {
-        this.container = container;
-        this.canvas = null;
-        this.ctx = null;
-        this.playerX = 5; // Grid position (0-9)
-        this.score = 0;
-        this.obstacles = [];
-        this.gameLoop = null;
-        this.speed = 300; // ms between moves
-        this.roadY = 0; // For scrolling effect
-    }
-
-    start() {
-        const html = `
-<div class="game-container fade-in">
-    <div class="gradient-card orange">
-        <div class="card-content">
-            <h3 class="card-title">RACER</h3>
-            <p class="card-description">Use LEFT/RIGHT arrows to dodge obstacles</p>
-            <div style="margin: 1.5rem 0;">
-                <canvas id="racerCanvas" width="400" height="600" style="border: 2px solid var(--accent-orange); background: #333; display: block; margin: 0 auto;"></canvas>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span class="card-action">SCORE: <span id="racerScore">0</span></span>
-                <button onclick="window.currentGame.restart()" style="padding: 0.5rem 1rem; background: var(--accent-orange); border: none; color: #000; font-weight: 700; cursor: pointer; border-radius: 4px;">RESTART</button>
-            </div>
-        </div>
-    </div>
-</div>`;
-        this.container.innerHTML = html;
-        this.canvas = document.getElementById('racerCanvas');
-        this.ctx = this.canvas.getContext('2d');
-
-        // Scroll to game
-        setTimeout(() => {
-            const gameContainer = this.container.querySelector('.game-container');
-            if (gameContainer) {
-                gameContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }, 100);
-
-        this.setupControls();
-        this.spawnObstacle();
-        this.gameLoop = setInterval(() => this.update(), this.speed);
-    }
-
-    setupControls() {
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft' && this.playerX > 0) {
-                this.playerX--;
-            }
-            if (e.key === 'ArrowRight' && this.playerX < 9) {
-                this.playerX++;
-            }
-        });
-    }
-
-    spawnObstacle() {
-        if (Math.random() < 0.7) { // 70% chance to spawn
-            const lanes = [];
-            const numObstacles = Math.floor(Math.random() * 3) + 1; // 1-3 obstacles
-
-            for (let i = 0; i < numObstacles; i++) {
-                let lane;
-                do {
-                    lane = Math.floor(Math.random() * 10);
-                } while (lanes.includes(lane));
-
-                lanes.push(lane);
-                this.obstacles.push({ x: lane, y: 0 });
-            }
-        }
-    }
-
-    update() {
-        // Move obstacles down
-        this.obstacles = this.obstacles.map(obs => ({
-            ...obs,
-            y: obs.y + 1
-        }));
-
-        // Remove off-screen obstacles and increase score
-        const beforeLength = this.obstacles.length;
-        this.obstacles = this.obstacles.filter(obs => obs.y < 15);
-        const removed = beforeLength - this.obstacles.length;
-        if (removed > 0) {
-            this.score += removed;
-            document.getElementById('racerScore').textContent = this.score;
-
-            // Speed up every 10 points
-            if (this.score % 10 === 0 && this.speed > 100) {
-                this.speed -= 20;
-                clearInterval(this.gameLoop);
-                this.gameLoop = setInterval(() => this.update(), this.speed);
-            }
-        }
-
-        // Check collision
-        const playerRow = 13; // Player is at row 13
-        const collision = this.obstacles.some(obs =>
-            obs.x === this.playerX && obs.y === playerRow
-        );
-
-        if (collision) {
-            this.gameOver();
-            return;
-        }
-
-        // Spawn new obstacles
-        if (Math.random() < 0.3) {
-            this.spawnObstacle();
-        }
-
-        // Road scrolling effect
-        this.roadY = (this.roadY + 2) % 40;
-
-        this.draw();
-    }
-
-    draw() {
-        const tileSize = 40;
-        const w = this.canvas.width;
-        const h = this.canvas.height;
-
-        // Background
-        this.ctx.fillStyle = '#1a1a1a';
-        this.ctx.fillRect(0, 0, w, h);
-
-        // Road
-        this.ctx.fillStyle = '#333';
-        this.ctx.fillRect(0, 0, w, h);
-
-        // Road lines
-        this.ctx.fillStyle = '#555';
-        for (let i = 0; i < 10; i++) {
-            for (let j = -1; j < 16; j++) {
-                const y = j * tileSize + this.roadY;
-                if (i === 0 || i === 9) {
-                    // Side lines
-                    this.ctx.fillRect(i * tileSize, y, tileSize, 2);
-                }
-                // Center dashed line
-                if (i === 4 || i === 5) {
-                    if (j % 2 === 0) {
-                        this.ctx.fillRect(i * tileSize + tileSize / 2 - 2, y, 4, tileSize / 2);
-                    }
-                }
-            }
-        }
-
-        // Obstacles
-        this.ctx.fillStyle = '#e91e63';
-        this.ctx.shadowBlur = 10;
-        this.ctx.shadowColor = '#e91e63';
-        this.obstacles.forEach(obs => {
-            this.ctx.fillRect(
-                obs.x * tileSize + 4,
-                obs.y * tileSize + 4,
-                tileSize - 8,
-                tileSize - 8
-            );
-        });
-        this.ctx.shadowBlur = 0;
-
-        // Player car
-        const playerY = 13;
-        this.ctx.fillStyle = '#00d9ff';
-        this.ctx.shadowBlur = 15;
-        this.ctx.shadowColor = '#00d9ff';
-        this.ctx.fillRect(
-            this.playerX * tileSize + 4,
-            playerY * tileSize + 4,
-            tileSize - 8,
-            tileSize - 8
-        );
-        this.ctx.shadowBlur = 0;
-
-        // Headlights
-        this.ctx.fillStyle = '#ffff00';
-        this.ctx.fillRect(this.playerX * tileSize + 8, playerY * tileSize + 8, 6, 6);
-        this.ctx.fillRect(this.playerX * tileSize + tileSize - 14, playerY * tileSize + 8, 6, 6);
-    }
-
-    gameOver() {
-        clearInterval(this.gameLoop);
-
-        // Save high score
-        if (this.score > 0) {
-            window.highScores.saveScore('racer', this.score);
-        }
-
-        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.fillStyle = '#fff';
-        this.ctx.font = '30px Orbitron';
-        this.ctx.textAlign = 'center';
-        this.ctx.fillText('GAME OVER', this.canvas.width / 2, this.canvas.height / 2);
-        this.ctx.font = '20px Orbitron';
-        this.ctx.fillText(`Score: ${this.score}`, this.canvas.width / 2, this.canvas.height / 2 + 40);
-
-        const highScore = window.highScores.getHighScore('racer');
-        if (this.score === highScore && this.score > 0) {
-            this.ctx.fillStyle = '#00d9ff';
-            this.ctx.fillText('NEW HIGH SCORE!', this.canvas.width / 2, this.canvas.height / 2 + 80);
-        }
-    }
-
-    restart() {
-        this.playerX = 5;
-        this.score = 0;
-        this.obstacles = [];
-        this.speed = 300;
-        this.roadY = 0;
-        document.getElementById('racerScore').textContent = '0';
-        clearInterval(this.gameLoop);
-        this.gameLoop = setInterval(() => this.update(), this.speed);
-    }
-}
 
 // Pong Game
 class PongGame {
@@ -664,22 +445,22 @@ class PongGame {
 
     start() {
         const html = `
-<div class="game-container fade-in">
-    <div class="gradient-card blue">
-        <div class="card-content">
-            <h3 class="card-title">PONG</h3>
-            <p class="card-description">Classic paddle game. W/S for left paddle, Arrow UP/DOWN for right paddle</p>
-            <div style="margin: 1.5rem 0;">
-                <canvas id="pongCanvas" width="600" height="400" style="border: 2px solid var(--accent-blue); background: #000; display: block; margin: 0 auto;"></canvas>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span class="card-action">PLAYER 1: <span id="pongScore1">0</span></span>
-                <button onclick="window.currentGame.restart()" style="padding: 0.5rem 1rem; background: var(--accent-blue); border: none; color: #fff; font-weight: 700; cursor: pointer; border-radius: 4px;">RESTART</button>
-                <span class="card-action">PLAYER 2: <span id="pongScore2">0</span></span>
-            </div>
-        </div>
-    </div>
-</div>`;
+            < div class="game-container fade-in" >
+                <div class="gradient-card blue">
+                    <div class="card-content">
+                        <h3 class="card-title">PONG</h3>
+                        <p class="card-description">Classic paddle game. W/S for left paddle, Arrow UP/DOWN for right paddle</p>
+                        <div style="margin: 1.5rem 0;">
+                            <canvas id="pongCanvas" width="600" height="400" style="border: 2px solid var(--accent-blue); background: #000; display: block; margin: 0 auto;"></canvas>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="card-action">PLAYER 1: <span id="pongScore1">0</span></span>
+                            <button onclick="window.currentGame.restart()" style="padding: 0.5rem 1rem; background: var(--accent-blue); border: none; color: #fff; font-weight: 700; cursor: pointer; border-radius: 4px;">RESTART</button>
+                            <span class="card-action">PLAYER 2: <span id="pongScore2">0</span></span>
+                        </div>
+                    </div>
+                </div>
+</div > `;
         this.container.innerHTML = html;
         this.canvas = document.getElementById('pongCanvas');
         this.ctx = this.canvas.getContext('2d');
@@ -801,7 +582,7 @@ class PongGame {
         this.ctx.fillStyle = '#fff';
         this.ctx.font = '30px Orbitron';
         this.ctx.textAlign = 'center';
-        this.ctx.fillText(`PLAYER ${winner} WINS!`, 300, 200);
+        this.ctx.fillText(`PLAYER ${ winner } WINS!`, 300, 200);
     }
 
     restart() {
@@ -839,21 +620,21 @@ class BreakoutGame {
 
     start() {
         const html = `
-<div class="game-container fade-in">
-    <div class="gradient-card green">
-        <div class="card-content">
-            <h3 class="card-title">BREAKOUT</h3>
-            <p class="card-description">Break all bricks. Use arrow LEFT/RIGHT or A/D to move paddle</p>
-            <div style="margin: 1.5rem 0;">
-                <canvas id="breakoutCanvas" width="600" height="400" style="border: 2px solid var(--accent-green); background: #000; display: block; margin: 0 auto;"></canvas>
-            </div>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span class="card-action">SCORE: <span id="breakoutScore">0</span></span>
-                <button onclick="window.currentGame.restart()" style="padding: 0.5rem 1rem; background: var(--accent-green); border: none; color: #000; font-weight: 700; cursor: pointer; border-radius: 4px;">RESTART</button>
-            </div>
-        </div>
-    </div>
-</div>`;
+            < div class="game-container fade-in" >
+                <div class="gradient-card green">
+                    <div class="card-content">
+                        <h3 class="card-title">BREAKOUT</h3>
+                        <p class="card-description">Break all bricks. Use arrow LEFT/RIGHT or A/D to move paddle</p>
+                        <div style="margin: 1.5rem 0;">
+                            <canvas id="breakoutCanvas" width="600" height="400" style="border: 2px solid var(--accent-green); background: #000; display: block; margin: 0 auto;"></canvas>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="card-action">SCORE: <span id="breakoutScore">0</span></span>
+                            <button onclick="window.currentGame.restart()" style="padding: 0.5rem 1rem; background: var(--accent-green); border: none; color: #000; font-weight: 700; cursor: pointer; border-radius: 4px;">RESTART</button>
+                        </div>
+                    </div>
+                </div>
+</div > `;
         this.container.innerHTML = html;
         this.canvas = document.getElementById('breakoutCanvas');
         this.ctx = this.canvas.getContext('2d');
@@ -989,7 +770,7 @@ class BreakoutGame {
         this.ctx.textAlign = 'center';
         this.ctx.fillText(won ? 'YOU WIN!' : 'GAME OVER', 300, 180);
         this.ctx.font = '20px Orbitron';
-        this.ctx.fillText(`Score: ${this.score}`, 300, 220);
+        this.ctx.fillText(`Score: ${ this.score } `, 300, 220);
 
         const highScore = window.highScores.getHighScore('breakout');
         if (this.score === highScore && this.score > 0) {
@@ -1016,6 +797,5 @@ class BreakoutGame {
 window.SnakeGame = SnakeGame;
 window.TetrisGame = TetrisGame;
 window.GuessNumberGame = GuessNumberGame;
-window.RacerGame = RacerGame;
 window.PongGame = PongGame;
 window.BreakoutGame = BreakoutGame;
